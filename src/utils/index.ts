@@ -1,7 +1,10 @@
 import * as Yup from 'yup';
 
+export * from './firebaseUtils';
 export * from './image';
+export * from './styles';
 export * from './types';
+export * from './wrapping';
 
 export const loginValidationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
@@ -29,5 +32,5 @@ export const newGiftValidationSchema: Yup.SchemaOf<{
 }> = Yup.object().shape({
   title: Yup.string().required().label('Title'),
   message: Yup.string().label('Message'),
-  age: Yup.number().label('Age'),
+  age: Yup.number().integer().label('Age'),
 });

@@ -12,8 +12,7 @@ import {
 import { auth } from '../../config';
 import { ScreenProps } from '../../navigation/AppStack';
 import { useToast } from '../../providers';
-import { passwordResetSchema } from '../../utils';
-import { styles } from './SignupScreen';
+import { formStyles, passwordResetSchema } from '../../utils';
 
 type Props = ScreenProps<'ForgotPassword'>;
 
@@ -34,8 +33,8 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
   );
 
   return (
-    <View isSafe style={styles.container}>
-      <View style={styles.logoContainer}>
+    <View isSafe style={formStyles.container}>
+      <View style={formStyles.logoContainer}>
         <Headline>Reset your password</Headline>
       </View>
       <Formik
@@ -63,7 +62,7 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
 
@@ -73,7 +72,7 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
 
               <Button
                 mode="contained"
-                style={styles.button}
+                style={formStyles.button}
                 onPress={handleSubmit}
                 disabled={!!errors.email}
               >
@@ -85,7 +84,7 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
       </Formik>
       <Button
         onPress={() => navigation.navigate('Login')}
-        style={styles.button}
+        style={formStyles.button}
       >
         Back to Login
       </Button>

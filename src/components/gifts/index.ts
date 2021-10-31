@@ -1,4 +1,4 @@
 import ViewAll from './ViewAll';
 
-export * from './NewGift';
+export * from './create/NewGift';
 export { ViewAll };

@@ -5,12 +5,14 @@ import React, {
   useContext,
   useState,
 } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 
 type PromptOptions = {
   title?: string;
   message?: string;
   actions: { text: string; onPress?: () => void }[];
+  vertical?: boolean;
 };
 
 type PromptContextType = {
@@ -42,12 +44,7 @@ export const usePrompt = () => {
 };
 
 export const PromptProvider: FC = ({ children }) => {
-  const [ctx, setCtx] = useState<PromptContextType>({
-    visible: false,
-    hide: () => null,
-    show: () => null,
-    prompt: { actions: [] },
-  });
+  const [ctx, setCtx] = useState<PromptContextType>(initialPrompt);
 
   const show = useCallback((options: PromptOptions) => {
     setCtx((old) => ({
@@ -60,6 +57,31 @@ export const PromptProvider: FC = ({ children }) => {
   const hide = useCallback(() => {
     setCtx({ ...ctx, visible: false });
   }, [ctx]);
+
+  const isVertical = ctx.prompt.vertical;
+
+  const actions = ctx.prompt.actions.map((action, i) => {
+    const onPress = () => {
+      hide();
+      action.onPress && action.onPress();
+    };
+    const btn = (
+      <Button key={i} onPress={onPress}>
+        {action.text}
+      </Button>
+    );
+
+    if (isVertical) {
+      return (
+        <View key={i} style={styles.row}>
+          <View style={styles.flex} />
+          {btn}
+        </View>
+      );
+    } else {
+      return btn;
+    }
+  });
 
   return (
     <PromptContext.Provider
@@ -81,21 +103,17 @@ export const PromptProvider: FC = ({ children }) => {
               <Paragraph>{ctx.prompt.message}</Paragraph>
             </Dialog.Content>
           ) : null}
-          <Dialog.Actions>
-            {ctx.prompt.actions.map((action, i) => {
-              const onPress = () => {
-                action.onPress && action.onPress();
-                hide();
-              };
-              return (
-                <Button key={i} onPress={onPress}>
-                  {action.text}
-                </Button>
-              );
-            })}
+          <Dialog.Actions style={ctx.prompt.vertical && styles.vertical}>
+            {ctx.prompt.vertical ? <View>{actions}</View> : actions}
           </Dialog.Actions>
         </Dialog>
       </Portal>
     </PromptContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  row: { flexDirection: 'row' },
+  vertical: { justifyContent: 'flex-end' },
+});

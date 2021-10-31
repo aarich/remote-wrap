@@ -1,7 +1,5 @@
 import {
   collection,
-  deleteDoc,
-  doc,
   onSnapshot,
   query,
   QueryConstraint,
@@ -12,7 +10,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ViewAll } from '../../components/gifts';
 import { firestore } from '../../config';
 import { useCurrentUser, usePrompt, useToast } from '../../providers';
-import { Gift } from '../../utils';
+import { deleteGift, Gift } from '../../utils';
 
 const snapshot = (
   queryConstraint: QueryConstraint,
@@ -65,15 +63,18 @@ export const ViewAllContainer = () => {
   );
 
   const onDeleteGift = useCallback(
-    (giftId: string) => {
-      const deleteFn = () =>
-        deleteDoc(doc(firestore, 'gifts', giftId)).then(() =>
-          toast({ text: `Deleted gift.` })
-        );
+    (gift: Gift) => {
       prompt({
         title: 'Are you sure',
         message: 'Everyone will lose access immediately',
-        actions: [{ text: 'Delete', onPress: deleteFn }, { text: 'Cancel' }],
+        actions: [
+          {
+            text: 'Delete',
+            onPress: () =>
+              deleteGift(gift).then(() => toast({ text: `Deleted gift.` })),
+          },
+          { text: 'Cancel' },
+        ],
       });
     },
     [prompt, toast]

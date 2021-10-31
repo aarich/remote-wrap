@@ -1,7 +1,6 @@
 import { EmailAuthProvider, linkWithCredential } from 'firebase/auth';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Headline } from 'react-native-paper';
 import {
@@ -14,7 +13,7 @@ import {
 import { auth, Images } from '../../config';
 import { useTogglePasswordVisibility } from '../../hooks';
 import { ScreenProps } from '../../navigation/AppStack';
-import { signupValidationSchema } from '../../utils';
+import { formStyles, signupValidationSchema } from '../../utils';
 
 type Props = ScreenProps<'Signup'>;
 
@@ -43,12 +42,12 @@ export const SignupScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <View isSafe style={styles.container}>
+    <View isSafe style={formStyles.container}>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.logoContainer}>
+        <View style={formStyles.logoContainer}>
           <Logo uri={Images.logo} />
           <Headline>Create account</Headline>
         </View>
@@ -81,7 +80,7 @@ export const SignupScreen = ({ navigation }: Props) => {
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
               <TextInput
@@ -96,7 +95,7 @@ export const SignupScreen = ({ navigation }: Props) => {
                 value={values.password}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage
                 error={errors.password}
@@ -114,7 +113,7 @@ export const SignupScreen = ({ navigation }: Props) => {
                 value={values.confirmPassword}
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage
                 error={errors.confirmPassword}
@@ -126,7 +125,7 @@ export const SignupScreen = ({ navigation }: Props) => {
               ) : null}
 
               <Button
-                style={styles.button}
+                style={formStyles.button}
                 mode="contained"
                 onPress={handleSubmit}
               >
@@ -137,23 +136,16 @@ export const SignupScreen = ({ navigation }: Props) => {
         </Formik>
 
         <Button
-          style={styles.button}
+          style={formStyles.button}
           onPress={() => navigation.navigate('Login')}
         >
           Already have an account?
         </Button>
 
-        <Button style={styles.button} onPress={() => navigation.pop()}>
+        <Button style={formStyles.button} onPress={() => navigation.pop()}>
           Cancel
         </Button>
       </KeyboardAwareScrollView>
     </View>
   );
 };
-
-export const styles = StyleSheet.create({
-  button: { marginTop: 16 },
-  container: { flex: 1, paddingHorizontal: 12 },
-  logoContainer: { alignItems: 'center' },
-  textInput: { marginTop: 12 },
-});

@@ -9,7 +9,7 @@ type Props = {
   myGifts: Gift[];
   followingGifts: Gift[];
   onNavigateToGift: (giftId: string) => void;
-  onDeleteGift: (giftId: string) => void;
+  onDeleteGift: (gift: Gift) => void;
 };
 
 const ViewAll = ({
@@ -36,7 +36,7 @@ const ViewAll = ({
                 key={gift.id}
                 gift={gift}
                 onPress={() => onNavigateToGift(gift.id)}
-                onDelete={() => onDeleteGift(gift.id)}
+                onDelete={() => onDeleteGift(gift)}
                 mine
               />
             );

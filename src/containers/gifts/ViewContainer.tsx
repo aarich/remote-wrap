@@ -4,15 +4,14 @@ import { Image, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { LoadingIndicator } from '../../components';
 import { firestore } from '../../config';
-import { useAssetOrCachedImageSource, useCachedImageUri } from '../../hooks';
-import { ScreenProps } from '../../navigation/AppStack';
+import { useCachedImageUri } from '../../hooks';
 import { Gift } from '../../utils';
 
-type Props = ScreenProps<'View'>;
+type Props = { id: string };
 
-export const ViewScreen = ({ navigation, route }: Props) => {
-  const { id } = route.params;
+export const ViewContainer = ({ id }: Props) => {
   const [gift, setGift] = useState<Gift>();
+
   useEffect(() => {
     const unsub = onSnapshot(doc(firestore, 'gifts', id), (doc) => {
       const data = doc.data();
@@ -24,7 +23,6 @@ export const ViewScreen = ({ navigation, route }: Props) => {
   }, [id]);
 
   const cachedImageURI = useCachedImageUri(gift?.photoUID);
-  const cachedWrapSource = useAssetOrCachedImageSource(gift?.wrapUID);
 
   if (!gift) {
     return <LoadingIndicator />;
@@ -36,12 +34,6 @@ export const ViewScreen = ({ navigation, route }: Props) => {
       <Text>{gift.message}</Text>
       <Image
         source={{ uri: cachedImageURI }}
-        style={{ minWidth: 100, minHeight: 100 }}
-        resizeMethod="auto"
-        resizeMode="contain"
-      />
-      <Image
-        source={cachedWrapSource}
         style={{ minWidth: 100, minHeight: 100 }}
         resizeMethod="auto"
         resizeMode="contain"

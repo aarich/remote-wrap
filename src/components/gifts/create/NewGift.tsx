@@ -1,26 +1,25 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  Button,
-  FormErrorMessage,
-  LoadingIndicator,
-  TextInput,
-} from '../../components';
-import { styles as formStyles } from '../../screens';
-import { newGiftValidationSchema } from '../../utils';
+import { Text } from 'react-native-paper';
+import { Button, FormErrorMessage, LoadingIndicator, TextInput } from '../..';
+import { formStyles, newGiftValidationSchema } from '../../../utils';
 
 type Props = {
   hasSelectedPhoto: boolean;
+  hasSelectedWrap: boolean;
   imageUploadProgress?: number;
   onPressImageSelect: () => void;
+  onPressWrapSelect: () => void;
   onCreate: (v: { title: string; message?: string; age?: string }) => void;
 };
 
 export const NewGift = ({
   imageUploadProgress,
   hasSelectedPhoto,
+  hasSelectedWrap,
   onPressImageSelect,
+  onPressWrapSelect,
   onCreate,
 }: Props) => {
   if (imageUploadProgress !== undefined) {
@@ -88,7 +87,14 @@ export const NewGift = ({
               mode={hasSelectedPhoto ? 'outlined' : 'contained'}
               onPress={onPressImageSelect}
             >
-              Select Image
+              Select Gift Image
+            </Button>
+            <Button
+              style={formStyles.button}
+              mode={hasSelectedWrap ? 'outlined' : 'contained'}
+              onPress={onPressWrapSelect}
+            >
+              Select Wrapping Paper
             </Button>
             <Button
               style={formStyles.button}
@@ -96,11 +102,13 @@ export const NewGift = ({
               onPress={handleSubmit}
               disabled={
                 !!(errors.title || errors.message || errors.age) ||
-                !hasSelectedPhoto
+                !hasSelectedPhoto ||
+                !hasSelectedWrap
               }
             >
               Create
             </Button>
+            <Text style={formStyles.button}>You can share after creating.</Text>
           </>
         )}
       </Formik>

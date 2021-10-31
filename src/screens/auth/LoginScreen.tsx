@@ -14,8 +14,7 @@ import {
 import { auth, Images } from '../../config';
 import { useTogglePasswordVisibility } from '../../hooks';
 import { NavProp } from '../../navigation/AppStack';
-import { loginValidationSchema } from '../../utils';
-import { styles } from './SignupScreen';
+import { formStyles, loginValidationSchema } from '../../utils';
 
 type Props = { navigation: NavProp<'Login'> };
 
@@ -38,12 +37,12 @@ export const LoginScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <View isSafe style={styles.container}>
+    <View isSafe style={formStyles.container}>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.logoContainer}>
+        <View style={formStyles.logoContainer}>
           <Logo uri={Images.logo} />
           <Headline>Welcome back!</Headline>
         </View>
@@ -74,7 +73,7 @@ export const LoginScreen = ({ navigation }: Props) => {
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
               <TextInput
@@ -89,7 +88,7 @@ export const LoginScreen = ({ navigation }: Props) => {
                 value={values.password}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
-                style={styles.textInput}
+                style={formStyles.textInput}
               />
               <FormErrorMessage
                 error={errors.password}
@@ -101,7 +100,7 @@ export const LoginScreen = ({ navigation }: Props) => {
               ) : null}
 
               <Button
-                style={styles.button}
+                style={formStyles.button}
                 mode="contained"
                 onPress={handleSubmit}
                 disabled={!!(errors.email || errors.password)}
@@ -111,11 +110,11 @@ export const LoginScreen = ({ navigation }: Props) => {
             </>
           )}
         </Formik>
-        <Button style={styles.button} onPress={() => navigation.pop()}>
+        <Button style={formStyles.button} onPress={() => navigation.pop()}>
           Create a new account?
         </Button>
         <Button
-          style={styles.button}
+          style={formStyles.button}
           onPress={() => navigation.navigate('ForgotPassword')}
         >
           Forgot Password

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useColorScheme } from 'react-native';
+import 'react-native-get-random-values';
 import {
   DarkTheme,
   DefaultTheme,

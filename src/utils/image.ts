@@ -1,3 +1,4 @@
+import { manipulateAsync } from 'expo-image-manipulator';
 import {
   launchCameraAsync,
   launchImageLibraryAsync,
@@ -9,6 +10,29 @@ import { Linking, Platform } from 'react-native';
 import { usePrompt } from '../providers';
 
 type ImagePickerType = 'camera' | 'picker';
+
+const MAX_IMAGE_DIM = 800;
+
+const resizeImage = async (
+  imageURI: string,
+  currentWidth: number,
+  currentHeight: number
+) => {
+  let resize = null;
+  if (currentWidth > currentHeight) {
+    if (currentWidth > MAX_IMAGE_DIM) {
+      resize = { width: MAX_IMAGE_DIM };
+    }
+  } else {
+    if (currentHeight > MAX_IMAGE_DIM) {
+      resize = { height: MAX_IMAGE_DIM };
+    }
+  }
+
+  return resize
+    ? (await manipulateAsync(imageURI, [{ resize }])).uri
+    : imageURI;
+};
 
 const checkPermission = async (
   prompt: ReturnType<typeof usePrompt>,
@@ -48,21 +72,24 @@ const launch = async (
   const result = await launchFn({
     mediaTypes: MediaTypeOptions.Images,
     allowsEditing: true,
-    aspect: [4, 3],
+    aspect: [1, 1],
     quality: 1,
+    allowsMultipleSelection: false,
   });
 
   if (!result.cancelled && 'uri' in result) {
-    return result.uri;
+    return await resizeImage(result.uri, result.width, result.height);
   }
 };
 
 export const selectImage = async (
-  prompt: ReturnType<typeof usePrompt>
+  prompt: ReturnType<typeof usePrompt>,
+  message: string
 ): Promise<string | void> => {
   return new Promise((resolve) => {
     prompt({
       title: 'Upload Photo',
+      message,
       actions: [
         {
           text: 'Choose from Library',
@@ -74,6 +101,7 @@ export const selectImage = async (
         },
         { text: 'Cancel', onPress: resolve },
       ],
+      vertical: true,
     });
   });
 };
