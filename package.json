@@ -7,7 +7,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "testWatch": "jest --watch --coverage=false --changedSince=origin/master"
+    "testWatch": "jest --watch --coverage=false --changedSince=origin/master",
+    "predeploy-web": "expo build:web",
+    "deploy-hosting": "npm run predeploy-web && firebase deploy --only hosting"
   },
   "jest": {
     "preset": "jest-expo",
