@@ -1,12 +1,15 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from '../../components';
+import { UnwrapContainer } from '../../containers/gifts/UnwrapContainer';
+import { ScreenProps } from '../../navigation/AppStack';
 
-export const UnwrapScreen = () => {
-  return <View style={styles.container}></View>;
+type Props = ScreenProps<'Unwrap'>;
+
+export const UnwrapScreen = ({ route, navigation }: Props) => {
+  const { id } = route.params;
+  return (
+    <View isSafe>
+      <UnwrapContainer id={id} onDone={() => navigation.pop()} />
+    </View>
+  );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

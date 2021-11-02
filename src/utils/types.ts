@@ -20,3 +20,7 @@ export enum StandardWrap {
   HOLIDAY_1 = 'H1',
   HOLIDAY_2 = 'H2',
 }
+
+export const FULLY_WRAPPED_STATE = true;
+export const FULLY_UNWRAPPED_STATE = false;
+export type WrapState = boolean[][] | boolean;

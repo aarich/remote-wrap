@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Surface, useTheme } from 'react-native-paper';
 import { getImageFromWrap, StandardWrap } from '../../../utils';
 
 type Props = {
@@ -37,7 +37,7 @@ export const ImageCarousel = ({ images, selected, onSelect }: Props) => {
     };
     return (
       <Pressable onPress={() => onSelect(index === selected ? -1 : index)}>
-        <View style={styles.imageContainer}>
+        <Surface style={styles.imageContainer}>
           <Image
             source={getImageFromWrap(item)}
             resizeMode="cover"
@@ -45,7 +45,7 @@ export const ImageCarousel = ({ images, selected, onSelect }: Props) => {
             width={imageWidth}
             height={ITEM_HEIGHT}
           />
-        </View>
+        </Surface>
       </Pressable>
     );
   };

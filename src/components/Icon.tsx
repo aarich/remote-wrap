@@ -19,4 +19,8 @@ export const Icons: Record<string, IconName> = {
   PASSWORD: 'key',
   PLUS: 'plus',
   CHEVRON_RIGHT: 'chevron-right',
+  OPEN: 'unfold',
+  SHARE: 'link-external',
+  FLAME: 'flame',
+  INFO: 'info',
 };

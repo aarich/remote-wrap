@@ -1,28 +1,31 @@
 import {
-  INITIAL_WRAP_STATE,
-  matrixToWrapState,
-  wrapStateToMatrix as _wrapStateToMatrix,
+  dbValueToWrapState as _dbValueToWrapState,
+  FULLY_UNWRAPPED_DB_VALUE,
+  FULLY_UNWRAPPED_STATE,
+  FULLY_WRAPPED_DB_VALUE,
+  FULLY_WRAPPED_STATE,
+  wrapStateToDbValue,
 } from '..';
 
 const WIDTH = 6;
-const wrapStateToMatrix = (state: string) => _wrapStateToMatrix(state, WIDTH);
+const dbValueToWrapState = (state: string) => _dbValueToWrapState(state, WIDTH);
 
-describe('hex to matrix', () => {
-  test('initial state', () => {
-    const matrix = wrapStateToMatrix(INITIAL_WRAP_STATE);
+describe('db to state', () => {
+  test('wrapped state', () => {
+    const state = dbValueToWrapState(FULLY_WRAPPED_DB_VALUE);
+    expect(state).toBe(FULLY_WRAPPED_STATE);
+  });
 
-    expect(matrix).toHaveLength(WIDTH);
-    matrix.forEach((row) => {
-      expect(row).toHaveLength(WIDTH);
-      row.forEach((val) => expect(val).toBe(true));
-    });
+  test('unwrapped state', () => {
+    const state = dbValueToWrapState(FULLY_UNWRAPPED_DB_VALUE);
+    expect(state).toBe(FULLY_UNWRAPPED_STATE);
   });
 
   test('bottom right', () => {
-    const matrix = wrapStateToMatrix('AAAAAAAB');
+    const state = dbValueToWrapState('AAAAAAAB') as boolean[][];
 
-    expect(matrix).toHaveLength(WIDTH);
-    matrix.forEach((row, index) => {
+    expect(state).toHaveLength(WIDTH);
+    state.forEach((row, index) => {
       expect(row).toHaveLength(WIDTH);
       if (index !== WIDTH - 1) {
         row.forEach((val) => expect(val).toBe(false));
@@ -59,25 +62,25 @@ describe('matrix to hex', () => {
   });
 
   test('initial state', () => {
-    const state = matrixToWrapState(allCovered);
+    const state = wrapStateToDbValue(allCovered);
 
-    expect(state).toBe(INITIAL_WRAP_STATE);
+    expect(state).toBe(FULLY_WRAPPED_DB_VALUE);
 
-    const matrix = wrapStateToMatrix(state);
-    expect(matrix).toEqual(allCovered);
+    const matrix = dbValueToWrapState(state);
+    expect(matrix).toEqual(FULLY_WRAPPED_STATE);
   });
 
   test('allUncovered', () => {
-    const state = matrixToWrapState(allUncovered);
-    expect(state).toBe('AAAAAAAA');
+    const state = wrapStateToDbValue(allUncovered);
+    expect(state).toBe(FULLY_UNWRAPPED_DB_VALUE);
 
-    const matrix = wrapStateToMatrix(state);
-    expect(matrix).toEqual(allUncovered);
+    const matrix = dbValueToWrapState(state);
+    expect(matrix).toEqual(FULLY_UNWRAPPED_STATE);
   });
 
   test('one covered', () => {
     allCovered[0][0] = false;
-    const state = matrixToWrapState(allCovered);
+    const state = wrapStateToDbValue(allCovered);
 
     expect(state).toBe('Hz8/Pz8/');
   });
@@ -85,8 +88,8 @@ describe('matrix to hex', () => {
   test(
     'encode/decode ' + random.map((row) => row.map((b) => (b ? 1 : 0))),
     () => {
-      const state = matrixToWrapState(random);
-      const matrix = wrapStateToMatrix(state);
+      const state = wrapStateToDbValue(random);
+      const matrix = dbValueToWrapState(state);
       expect(matrix).toEqual(random);
     }
   );

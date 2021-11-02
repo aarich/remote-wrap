@@ -8,7 +8,7 @@ import {
 import { useNavigation } from '@react-navigation/core';
 import { StackActions } from '@react-navigation/routers';
 import { signOut, updateProfile } from 'firebase/auth';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { LoadingIndicator } from '../../components';
 import { Settings } from '../../components/app';
 import { auth, firestore } from '../../config';
@@ -63,6 +63,10 @@ export const SettingsScreen = () => {
     setDisplayName(user?.displayName);
     setIsEditingName(false);
   }, [user?.displayName]);
+
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   if (isLoading) {
     return <LoadingIndicator />;

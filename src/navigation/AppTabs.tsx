@@ -54,6 +54,7 @@ export const AppTabs = ({ navigation }: Props) => {
             tabBarIcon: ({ color, size }) => (
               <Icon name="settings" color={color} size={size} />
             ),
+            headerShown: false,
           }}
         />
       </Tab.Navigator>

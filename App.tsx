@@ -1,5 +1,5 @@
 import React from 'react';
-import { useColorScheme } from 'react-native';
+import { LogBox, useColorScheme } from 'react-native';
 import 'react-native-get-random-values';
 import {
   DarkTheme,
@@ -15,8 +15,11 @@ import {
   ToastProvider,
 } from './src/providers';
 
+LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core']);
+
 const App = () => {
   const isDark = useColorScheme() === 'dark';
+
   return (
     <PaperProvider
       theme={isDark ? DarkTheme : DefaultTheme}

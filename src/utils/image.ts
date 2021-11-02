@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system';
 import { manipulateAsync } from 'expo-image-manipulator';
 import {
   launchCameraAsync,
@@ -104,4 +105,13 @@ export const selectImage = async (
       vertical: true,
     });
   });
+};
+
+export const getCachedUri = (guid: string) => FileSystem.cacheDirectory + guid;
+
+export const deleteCachedImage = (guid: string) => {
+  const cachedURI = getCachedUri(guid);
+  return FileSystem.getInfoAsync(cachedURI, { size: false }).then(
+    ({ exists }) => exists && FileSystem.deleteAsync(cachedURI)
+  );
 };

@@ -9,9 +9,9 @@ import { NavProp } from '../../navigation/AppStack';
 import { usePrompt, useToast } from '../../providers';
 import { useCurrentUser } from '../../providers/AuthenticatedUserProvider';
 import {
-  deleteImageFromFirebase,
+  deleteImage,
+  FULLY_WRAPPED_DB_VALUE,
   Gift,
-  INITIAL_WRAP_STATE,
   makeName,
   selectImage,
   StandardWrap,
@@ -54,7 +54,7 @@ export const NewGiftContainer = ({ navigation }: Props) => {
           following: [],
           photoUID,
           wrapUID,
-          wrapState: INITIAL_WRAP_STATE,
+          wrapState: FULLY_WRAPPED_DB_VALUE,
         };
 
         addDoc(collection(firestore, 'gifts'), doc)
@@ -104,7 +104,7 @@ export const NewGiftContainer = ({ navigation }: Props) => {
               },
               (error) => {
                 onError(error);
-                deleteImageFromFirebase(photoUID);
+                deleteImage(photoUID);
               },
               () => createGiftDoc(photoUID, wrapUID)
             );

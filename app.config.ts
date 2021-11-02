@@ -7,6 +7,7 @@ const config: ExpoConfig = {
   privacy: 'hidden',
   platforms: ['ios', 'android', 'web'],
   version: '0.0.1',
+  scheme: 'remotewrap',
   orientation: 'portrait',
   icon: './assets/flame.png',
   splash: {

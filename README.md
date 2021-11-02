@@ -8,7 +8,6 @@
 
 ### Work
 
-- [ ] Viewing progress
 - [ ] Scratch off
 - [ ] deep linking
 - [ ] merging accounts

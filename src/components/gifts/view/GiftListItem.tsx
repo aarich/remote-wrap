@@ -1,8 +1,8 @@
 import React, { ComponentProps, memo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { List } from 'react-native-paper';
-import { Gift } from '../../utils';
-import { Icons } from '../Icon';
+import { Gift } from '../../../utils';
+import { Icons } from '../../Icon';
 
 type Props = {
   gift: Gift;

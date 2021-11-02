@@ -1,8 +1,5 @@
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  StackScreenProps,
-} from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
 import {
   ForgotPasswordScreen,
@@ -38,11 +35,11 @@ export type ScreenProps<S extends keyof StackParamList> = StackScreenProps<
   S
 >;
 
-const Stack = createStackNavigator<StackParamList>();
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerLargeTitle: true }}>
       <Stack.Screen
         name="Tabs"
         component={AppTabs}
@@ -64,8 +61,21 @@ export const AppStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Create" component={NewScreen} />
-      <Stack.Screen name="View" component={ViewScreen} />
-      <Stack.Screen name="Unwrap" component={UnwrapScreen} />
+      <Stack.Screen
+        name="View"
+        component={ViewScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Unwrap"
+        component={UnwrapScreen}
+        options={{
+          animation: 'none',
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

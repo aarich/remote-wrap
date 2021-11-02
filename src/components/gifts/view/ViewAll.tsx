@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Headline, List, Subheading } from 'react-native-paper';
-import { Icon, Icons } from '../../components';
-import { Gift } from '../../utils';
+import { Icon, Icons } from '../..';
+import { Gift } from '../../../utils';
 import GiftListItem from './GiftListItem';
 
 type Props = {
@@ -21,7 +21,9 @@ const ViewAll = ({
   return (
     <View style={styles.container}>
       <List.Section>
-        <List.Subheader>Created by me</List.Subheader>
+        <List.Subheader>
+          {myGifts.length === 0 ? '' : 'Created by me'}
+        </List.Subheader>
         {myGifts.length === 0 ? (
           <View style={styles.center}>
             <Headline style={styles.center}>Create something exciting</Headline>

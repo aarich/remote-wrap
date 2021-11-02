@@ -1,6 +1,11 @@
 import { Base64 } from 'js-base64';
 import { Images } from '../config';
-import { StandardWrap } from './types';
+import {
+  FULLY_UNWRAPPED_STATE,
+  FULLY_WRAPPED_STATE,
+  StandardWrap,
+  WrapState,
+} from './types';
 
 export const getImageFromWrap = (wrap: StandardWrap) => {
   switch (wrap) {
@@ -17,19 +22,23 @@ export const getImageFromWrap = (wrap: StandardWrap) => {
   }
 };
 
-export const WRAP_WIDTH = 100;
-export const INITIAL_WRAP_STATE = '';
+export const WRAP_WIDTH = 15;
+export const FULLY_WRAPPED_DB_VALUE = '';
+export const FULLY_UNWRAPPED_DB_VALUE = 'X';
 
 /**
  * @returns a matrix of 100x100 grid of true/false. true means covered
  */
-export const wrapStateToMatrix = (
+export const dbValueToWrapState = (
   wrapState: string,
   width = WRAP_WIDTH
-): boolean[][] => {
-  if (wrapState === INITIAL_WRAP_STATE) {
-    return new Array(width).fill(new Array(width).fill(true));
+): WrapState => {
+  if (wrapState === FULLY_WRAPPED_DB_VALUE) {
+    return FULLY_WRAPPED_STATE;
+  } else if (wrapState === FULLY_UNWRAPPED_DB_VALUE) {
+    return FULLY_UNWRAPPED_STATE;
   }
+
   const u8s = Base64.toUint8Array(wrapState);
 
   const flattened: boolean[] = [];
@@ -53,16 +62,27 @@ export const wrapStateToMatrix = (
   return matrix;
 };
 
-export const matrixToWrapState = (matrix: boolean[][]): string => {
+export const wrapStateToDbValue = (wrapState: WrapState): string => {
   // It's all covered
-  if (matrix.every((row) => row.every((b) => b))) {
-    return INITIAL_WRAP_STATE;
+  if (typeof wrapState === 'boolean') {
+    switch (wrapState) {
+      case FULLY_WRAPPED_STATE:
+        return FULLY_WRAPPED_DB_VALUE;
+      case FULLY_UNWRAPPED_STATE:
+        return FULLY_UNWRAPPED_DB_VALUE;
+    }
+  }
+
+  if (wrapState.every((row) => row.every((b) => b))) {
+    return FULLY_WRAPPED_DB_VALUE;
+  } else if (wrapState.every((row) => row.every((b) => !b))) {
+    return FULLY_UNWRAPPED_DB_VALUE;
   }
 
   const bits = 6;
 
   const flattened: boolean[] = [];
-  matrix.forEach((row) => row.forEach((b) => flattened.push(b)));
+  wrapState.forEach((row) => row.forEach((b) => flattened.push(b)));
 
   const intArray: number[] = [];
   for (let i = 0; i < flattened.length; i += bits) {
