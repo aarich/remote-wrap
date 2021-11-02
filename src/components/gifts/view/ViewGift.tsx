@@ -39,6 +39,7 @@ export const ViewGift = memo(
               aboveSource={wrapSource}
               belowSource={giftSource}
               state={wrapState}
+              onSetSquareWidth={() => null}
             />
           </Card.Content>
           <Card.Actions style={styles.flexEnd}>

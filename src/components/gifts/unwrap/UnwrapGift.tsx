@@ -16,7 +16,7 @@ import {
   WrapState,
 } from '../../../utils';
 import { giftCardStyles } from '../styles';
-import CoveredImage, { squareWidth } from '../unwrap/CoveredImage';
+import CoveredImage from '../unwrap/CoveredImage';
 
 type Props = {
   gift: Gift;
@@ -39,15 +39,17 @@ export const UnwrapGift = ({
   onUncoverWrap,
   onDone,
 }: Props) => {
+  const [squareWidth, setSquareWidth] = useState(1);
+  const [minHeight, setMinTextHeight] = useState<number>();
+
   const handleTouch = useCallback(
     (x, y) => {
       // map x,y coordinates to spaces
       onUncoverWrap(Math.round(x / squareWidth), Math.round(y / squareWidth));
     },
-    [onUncoverWrap]
+    [onUncoverWrap, squareWidth]
   );
 
-  const [minHeight, setMinTextHeight] = useState<number>();
   const handleTextViewLayout = useCallback(
     ({
       nativeEvent: {
@@ -77,6 +79,7 @@ export const UnwrapGift = ({
                 aboveSource={wrapSource}
                 belowSource={giftSource}
                 state={wrapState}
+                onSetSquareWidth={setSquareWidth}
               />
             </Animated.View>
           </PanGestureHandler>

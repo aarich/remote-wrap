@@ -1,5 +1,10 @@
-import React, { memo, useMemo } from 'react';
-import { Dimensions, ImageSourcePropType } from 'react-native';
+import React, { memo, useEffect, useMemo, useState } from 'react';
+import {
+  Image as RNImage,
+  ImageSourcePropType,
+  Platform,
+  useWindowDimensions,
+} from 'react-native';
 import Svg, { ClipPath, Defs, Image, Rect } from 'react-native-svg';
 import { LoadingIndicator } from '../..';
 import { WrapState, WRAP_WIDTH } from '../../../utils';
@@ -8,13 +13,28 @@ type Props = {
   belowSource: ImageSourcePropType;
   aboveSource: ImageSourcePropType;
   state: WrapState;
+  onSetSquareWidth: (width: number) => void;
 };
 
-const width = Dimensions.get('window').width;
 const squarePercent = `${100 / WRAP_WIDTH}%`;
-export const squareWidth = width / WRAP_WIDTH;
 
-const CoveredImage = ({ aboveSource, belowSource, state }: Props) => {
+const getSource = (original: ImageSourcePropType) => {
+  if (Platform.OS === 'web') {
+    if (typeof original === 'object' && 'uri' in original) {
+      return original.uri;
+    }
+  }
+
+  return original;
+};
+
+const CoveredImage = ({
+  aboveSource,
+  belowSource,
+  state,
+  onSetSquareWidth,
+}: Props) => {
+  const width = useWindowDimensions().width;
   const clips: [number, number][] | boolean = useMemo(() => {
     if (typeof state === 'boolean') {
       return state;
@@ -31,9 +51,28 @@ const CoveredImage = ({ aboveSource, belowSource, state }: Props) => {
     return ret;
   }, [state]);
 
+  const [squareWidth, setSquareWidth] = useState(width / WRAP_WIDTH);
+
+  useEffect(() => {
+    if (
+      Platform.OS !== 'web' &&
+      typeof belowSource !== 'number' &&
+      'uri' in belowSource
+    ) {
+      RNImage.getSize(belowSource.uri, (width, height) => {
+        onSetSquareWidth(Math.min(width, height) / WRAP_WIDTH);
+        setSquareWidth(Math.min(width, height) / WRAP_WIDTH);
+      });
+    } else {
+      onSetSquareWidth(width / WRAP_WIDTH);
+      setSquareWidth(width / WRAP_WIDTH);
+    }
+  }, [belowSource, onSetSquareWidth, width]);
+
   if (!aboveSource || !belowSource) {
     return <LoadingIndicator />;
   }
+  console.log({ belowSource, aboveSource, width });
 
   if (typeof clips === 'boolean') {
     return (
@@ -44,7 +83,8 @@ const CoveredImage = ({ aboveSource, belowSource, state }: Props) => {
           width="100%"
           height="100%"
           preserveAspectRatio="xMidYMid slice"
-          href={clips ? aboveSource : belowSource}
+          // @ts-ignore Web requires href to be just a string
+          href={getSource(clips ? aboveSource : belowSource)}
         />
       </Svg>
     );
@@ -71,7 +111,8 @@ const CoveredImage = ({ aboveSource, belowSource, state }: Props) => {
         width="100%"
         height="100%"
         preserveAspectRatio="xMidYMid slice"
-        href={belowSource}
+        // @ts-ignore Web requires href to be just a string
+        href={getSource(belowSource)}
       />
       <Image
         x="0"
@@ -79,7 +120,8 @@ const CoveredImage = ({ aboveSource, belowSource, state }: Props) => {
         width="100%"
         height="100%"
         preserveAspectRatio="xMidYMid slice"
-        href={aboveSource}
+        // @ts-ignore Web requires href to be just a string
+        href={getSource(aboveSource)}
         clipPath="url(#clip)"
       />
     </Svg>

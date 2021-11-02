@@ -2,14 +2,14 @@ import { ExpoConfig } from '@expo/config-types';
 import 'dotenv/config';
 
 const config: ExpoConfig = {
-  name: 'Remote Wrap',
+  name: 'Presence',
   slug: 'remote-wrap',
   privacy: 'hidden',
   platforms: ['ios', 'android', 'web'],
   version: '0.0.1',
   scheme: 'remotewrap',
   orientation: 'portrait',
-  icon: './assets/flame.png',
+  icon: './assets/gift-outline-white-background.png',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'cover',
@@ -21,6 +21,19 @@ const config: ExpoConfig = {
   assetBundlePatterns: ['**/*'],
   android: {
     permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE'],
+    intentFilters: [
+      {
+        action: 'VIEW',
+        data: [
+          {
+            scheme: 'https',
+            host: '*.mrarich.com',
+            pathPrefix: '/gift',
+          },
+        ],
+        category: ['BROWSABLE', 'DEFAULT'],
+      },
+    ],
   },
   ios: {
     supportsTablet: true,
@@ -28,6 +41,12 @@ const config: ExpoConfig = {
       NSPhotoLibraryUsageDescription: 'Upload photos to share as a surprise',
       NSCameraUsageDescription: 'Take photos to share as a surprise',
     },
+    associatedDomains: ['applinks:https://presence.mrarich.com'],
+  },
+  web: {
+    name: 'Presence',
+    backgroundColor: '#000',
+    description: 'An app for sharing gifts remotely',
   },
   userInterfaceStyle: 'automatic',
   extra: {

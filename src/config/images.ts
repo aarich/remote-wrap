@@ -1,5 +1,5 @@
 export const Images = {
-  logo: require('../../assets/flame.png'),
+  logo: require('../../assets/gift-outline-white-background.png'),
   wrapping1: require('../../assets/wraps/wrapping1.jpg'),
   wrapping2: require('../../assets/wraps/wrapping2.jpg'),
   wrapping3: require('../../assets/wraps/wrapping3.jpg'),
