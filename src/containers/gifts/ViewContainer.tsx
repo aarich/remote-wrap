@@ -1,5 +1,6 @@
 import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
+import { isAvailableAsync as isSharingAvailable } from 'expo-sharing';
 import { doc, onSnapshot } from 'firebase/firestore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Share } from 'react-native';
@@ -63,19 +64,30 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   const isOwner = useCurrentUser()?.uid === gift?.createdById;
   const onShare = useCallback(() => {
     const url = Linking.createURL('gift', { queryParams: { id } });
-    prompt({
-      title: 'Share',
-      message:
-        "At the moment your recipient must download the app first, but we're working on a solution to fix that soon!",
-      actions: [
+
+    isSharingAvailable().then((canShare) => {
+      const actions: Parameters<typeof prompt>[0]['actions'] = [
         {
           text: 'Copy link to clipboard',
           onPress: () => Clipboard.setString(url),
         },
-        { text: 'Share via...', onPress: () => Share.share({ url }) },
-        { text: 'Cancel' },
-      ],
-      vertical: true,
+      ];
+
+      if (canShare) {
+        actions.push({
+          text: 'Share via...',
+          onPress: () => Share.share({ url }),
+        });
+      }
+
+      actions.push({ text: 'Cancel' });
+
+      prompt({
+        title: 'Share',
+        message: "How would you like to make someone's day?",
+        actions,
+        vertical: true,
+      });
     });
   }, [id, prompt]);
 

@@ -72,7 +72,7 @@ export const NewGift = ({
               error={errors.message}
               visible={touched.message}
             />
-            <TextInput
+            {/* <TextInput
               label="Delete after how many days (optional)"
               keyboardType="number-pad"
               value={values.age}
@@ -80,7 +80,7 @@ export const NewGift = ({
               onBlur={handleBlur('age')}
               style={formStyles.textInput}
             />
-            <FormErrorMessage error={errors.age} visible={touched.age} />
+            <FormErrorMessage error={errors.age} visible={touched.age} /> */}
 
             <Button
               style={formStyles.button}

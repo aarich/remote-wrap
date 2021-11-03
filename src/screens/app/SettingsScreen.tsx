@@ -83,6 +83,7 @@ export const SettingsScreen = () => {
       onLogInOut={logInOutAction}
       onDeleteGifts={deleteGiftsAction}
       onSaveUserProfile={updateUserProfile}
+      onNavigate={(screen) => navigation.dispatch(StackActions.push(screen))}
     />
   );
 };

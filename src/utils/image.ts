@@ -88,20 +88,26 @@ export const selectImage = async (
   message: string
 ): Promise<string | void> => {
   return new Promise((resolve) => {
+    const actions: Parameters<typeof prompt>[0]['actions'] = [
+      {
+        text: 'Choose from Library',
+        onPress: () => launch(prompt, 'picker').then(resolve),
+      },
+    ];
+
+    if (Platform.OS !== 'web') {
+      actions.push({
+        text: 'Take Photo',
+        onPress: () => launch(prompt, 'camera').then(resolve),
+      });
+    }
+
+    actions.push({ text: 'Cancel', onPress: resolve });
+
     prompt({
       title: 'Upload Photo',
       message,
-      actions: [
-        {
-          text: 'Choose from Library',
-          onPress: () => launch(prompt, 'picker').then(resolve),
-        },
-        {
-          text: 'Take Photo',
-          onPress: () => launch(prompt, 'camera').then(resolve),
-        },
-        { text: 'Cancel', onPress: resolve },
-      ],
+      actions,
       vertical: true,
     });
   });

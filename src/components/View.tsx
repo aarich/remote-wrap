@@ -1,23 +1,23 @@
 import React, { FC } from 'react';
 import {
   SafeAreaView,
-  StyleProp,
   StyleSheet,
   View as RNView,
-  ViewStyle,
+  ViewProps,
 } from 'react-native';
 
 type Props = {
   isSafe?: boolean;
-  style?: StyleProp<ViewStyle>;
-};
+} & ViewProps;
 
-export const View: FC<Props> = ({ isSafe, style, children }) => {
-  const content = <RNView style={StyleSheet.flatten(style)}>{children}</RNView>;
+export const View: FC<Props> = ({ isSafe, children, ...other }) => {
+  const content = <RNView {...other}>{children}</RNView>;
 
   return isSafe ? (
-    <SafeAreaView style={{ flex: 1 }}>{content}</SafeAreaView>
+    <SafeAreaView style={styles.container}>{content}</SafeAreaView>
   ) : (
     content
   );
 };
+
+const styles = StyleSheet.create({ container: { flex: 1 } });

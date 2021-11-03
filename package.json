@@ -9,12 +9,17 @@
     "test": "jest",
     "testWatch": "jest --watch --coverage=false --changedSince=origin/master",
     "predeploy-web": "expo build:web",
-    "deploy-hosting": "npm run predeploy-web && firebase deploy --only hosting"
+    "deploy-hosting": "npm run predeploy-web && firebase deploy --only hosting",
+    "storybook": "start-storybook -p 7007",
+    "build-storybook": "build-storybook"
   },
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/__mocks__/globalMock.js"
     ]
   },
   "dependencies": {
@@ -49,13 +54,23 @@
     "react-native-web": "^0.17.1",
     "react-native-webview": "11.13.0",
     "uuid": "^8.3.2",
-    "yup": "0.32.11"
+    "yup": "0.32.11",
+    "expo-sharing": "~10.0.3",
+    "expo-ads-admob": "~11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/eslint-parser": "7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@babel/runtime": "^7.9.0",
+    "@storybook/addon-actions": "^5.3.21",
+    "@storybook/addon-knobs": "^5.3.21",
+    "@storybook/addon-links": "^5.3.21",
+    "@storybook/addon-ondevice-actions": "^5.3.23",
+    "@storybook/addon-ondevice-knobs": "^5.3.25",
+    "@storybook/addon-viewport": "^6.3.12",
+    "@storybook/react-native": "^5.3.25",
+    "@storybook/react-native-server": "^5.3.23",
     "@types/jest": "^27.0.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",

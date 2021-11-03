@@ -55,7 +55,7 @@ const CoveredImage = ({
 
   useEffect(() => {
     if (
-      Platform.OS !== 'web' &&
+      Platform.OS === 'web' &&
       typeof belowSource !== 'number' &&
       'uri' in belowSource
     ) {

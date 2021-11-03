@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 
+export * from './ads';
 export * from './firebaseUtils';
 export * from './image';
 export * from './styles';

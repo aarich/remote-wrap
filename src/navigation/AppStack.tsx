@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
+import constants from '../config/constants';
 import {
   ForgotPasswordScreen,
   LoginScreen,
@@ -9,6 +10,7 @@ import {
   UnwrapScreen,
   ViewScreen,
 } from '../screens';
+import { AboutScreen } from '../screens/app/AboutScreen';
 import { AppTabs } from './AppTabs';
 
 type StackParamList = {
@@ -19,11 +21,15 @@ type StackParamList = {
 
   // App
   Tabs: undefined;
+  About: undefined;
 
   // Gifts
   Create: undefined;
   View: { id: string };
   Unwrap: { id: string };
+
+  // Tests
+  Storybook: undefined;
 };
 
 export type NavProp<S extends keyof StackParamList> = StackNavigationProp<
@@ -75,6 +81,11 @@ export const AppStack = () => {
           animation: 'none',
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name="About"
+        component={AboutScreen}
+        options={{ headerTitle: `About ${constants.appName}` }}
       />
     </Stack.Navigator>
   );

@@ -42,11 +42,15 @@ const config: ExpoConfig = {
       NSCameraUsageDescription: 'Take photos to share as a surprise',
     },
     associatedDomains: ['applinks:https://presence.mrarich.com'],
+    config: {
+      googleMobileAdsAppId: 'ca-app-pub-6949812709353975~8167043362',
+    },
   },
   web: {
     name: 'Presence',
     backgroundColor: '#000',
     description: 'An app for sharing gifts remotely',
+    themeColor: '#000',
   },
   userInterfaceStyle: 'automatic',
   extra: {
@@ -58,6 +62,8 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
+
+    MyVersion: '1.0',
   },
 };
 

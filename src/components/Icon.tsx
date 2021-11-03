@@ -23,4 +23,5 @@ export const Icons: Record<string, IconName> = {
   SHARE: 'link-external',
   FLAME: 'flame',
   INFO: 'info',
+  HEART: 'heart',
 };

@@ -8,11 +8,9 @@
 
 ### Work
 
-- [ ] Scratch off
+- [ ] Add meta tag for safari
+- [ ] Following
 - [ ] deep linking
-- [ ] merging accounts
-- [ ] email notifications
-- [ ] push notifications
 
 ### Thanks
 

@@ -18,11 +18,11 @@ export const RootNavigator = () => {
   useEffect(
     () =>
       onAuthStateChanged(auth, (authenticatedUser) => {
+        setIsLoading(false);
         if (authenticatedUser === null) {
           signInAnonymously(auth);
         }
         setUser(authenticatedUser || null);
-        setIsLoading(false);
       }),
     [setUser, user]
   );
