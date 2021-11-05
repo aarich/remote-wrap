@@ -5,4 +5,11 @@ export const Images = {
   wrapping3: require('../../assets/wraps/wrapping3.jpg'),
   wrapping4: require('../../assets/wraps/wrapping4.jpg'),
   wrapping5: require('../../assets/wraps/wrapping5.jpg'),
+  wrapping6: require('../../assets/wraps/wrapping6.jpeg'),
+  wrapping7: require('../../assets/wraps/wrapping7.jpeg'),
+  wrapping8: require('../../assets/wraps/wrapping8.jpeg'),
+  wrapping9: require('../../assets/wraps/wrapping9.jpeg'),
+  wrapping10: require('../../assets/wraps/wrapping10.jpeg'),
+  wrapping11: require('../../assets/wraps/wrapping11.jpeg'),
+  demoImage: require('../../assets/wraps/wrapping1.jpg'),
 };

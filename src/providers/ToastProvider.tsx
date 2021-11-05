@@ -38,6 +38,7 @@ export const useToast = () => {
   const ctx = useContext(ToastContext);
   const toast = useCallback(
     (options: ToastOptions) => {
+      console.log('Sending message', options);
       ctx.show(options);
     },
     [ctx]

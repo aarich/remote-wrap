@@ -13,6 +13,7 @@ type Props = {
   belowSource: ImageSourcePropType;
   aboveSource: ImageSourcePropType;
   state: WrapState;
+  squareWidth: number;
   onSetSquareWidth: (width: number) => void;
 };
 
@@ -32,9 +33,11 @@ const CoveredImage = ({
   aboveSource,
   belowSource,
   state,
+  squareWidth,
   onSetSquareWidth,
 }: Props) => {
   const width = useWindowDimensions().width;
+  const [imageWidth, setImageWidth] = useState(width);
   const clips: [number, number][] | boolean = useMemo(() => {
     if (typeof state === 'boolean') {
       return state;
@@ -51,32 +54,28 @@ const CoveredImage = ({
     return ret;
   }, [state]);
 
-  const [squareWidth, setSquareWidth] = useState(width / WRAP_WIDTH);
+  useEffect(() => {
+    onSetSquareWidth(imageWidth / WRAP_WIDTH);
+  }, [imageWidth, onSetSquareWidth]);
 
   useEffect(() => {
-    if (
-      Platform.OS === 'web' &&
-      typeof belowSource !== 'number' &&
-      'uri' in belowSource
-    ) {
-      RNImage.getSize(belowSource.uri, (width, height) => {
-        onSetSquareWidth(Math.min(width, height) / WRAP_WIDTH);
-        setSquareWidth(Math.min(width, height) / WRAP_WIDTH);
+    if (Platform.OS === 'web' && belowSource && aboveSource) {
+      RNImage.getSize(getSource(belowSource) as string, (w, h) => {
+        setImageWidth((old) => Math.min(w, h, old));
       });
-    } else {
-      onSetSquareWidth(width / WRAP_WIDTH);
-      setSquareWidth(width / WRAP_WIDTH);
+      RNImage.getSize(getSource(aboveSource) as string, (w, h) => {
+        setImageWidth((old) => Math.min(w, h, old));
+      });
     }
-  }, [belowSource, onSetSquareWidth, width]);
+  }, [aboveSource, belowSource]);
 
   if (!aboveSource || !belowSource) {
     return <LoadingIndicator />;
   }
-  console.log({ belowSource, aboveSource, width });
 
   if (typeof clips === 'boolean') {
     return (
-      <Svg width={width} height={width}>
+      <Svg width={imageWidth} height={imageWidth}>
         <Image
           x="0"
           y="0"
@@ -91,7 +90,7 @@ const CoveredImage = ({
   }
 
   return (
-    <Svg width={width} height={width}>
+    <Svg width={imageWidth} height={imageWidth}>
       <Defs>
         <ClipPath id="clip">
           {clips.map(([x, y]) => (

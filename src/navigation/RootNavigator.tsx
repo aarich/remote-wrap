@@ -3,7 +3,7 @@ import {
   DefaultTheme,
   NavigationContainer,
 } from '@react-navigation/native';
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { LoadingIndicator } from '../components';
@@ -19,9 +19,6 @@ export const RootNavigator = () => {
     () =>
       onAuthStateChanged(auth, (authenticatedUser) => {
         setIsLoading(false);
-        if (authenticatedUser === null) {
-          signInAnonymously(auth);
-        }
         setUser(authenticatedUser || null);
       }),
     [setUser, user]

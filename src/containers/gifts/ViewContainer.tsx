@@ -1,15 +1,13 @@
 import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
 import { isAvailableAsync as isSharingAvailable } from 'expo-sharing';
-import { doc, onSnapshot } from 'firebase/firestore';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Share } from 'react-native';
 import { LoadingIndicator } from '../../components';
 import { ViewGift } from '../../components/gifts';
-import { firestore } from '../../config';
-import { useAssetOrCachedImageSource, useCachedImageUri } from '../../hooks';
+import { useGiftInfo } from '../../hooks/useGiftInfo';
 import { useCurrentUser, usePrompt, useToast } from '../../providers';
-import { dbValueToWrapState, deleteGift, Gift } from '../../utils';
+import { deleteGift, toggleFollow } from '../../utils';
 
 type Props = {
   id: string;
@@ -20,24 +18,20 @@ type Props = {
 export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   const prompt = usePrompt();
   const toast = useToast();
-
-  const [gift, setGift] = useState<Gift>();
-  useEffect(() => {
-    const unsub = onSnapshot(doc(firestore, 'gifts', id), (doc) => {
-      const data = doc.data();
-      // @ts-ignore
-      setGift({ ...data, id });
-    });
-
-    return unsub;
-  }, [id]);
-
-  const cachedImageURI = useCachedImageUri(gift?.photoUID);
-  const cachedWrapSource = useAssetOrCachedImageSource(gift?.wrapUID);
-  const wrapState = useMemo(
-    () => gift?.wrapState != null && dbValueToWrapState(gift.wrapState),
-    [gift?.wrapState]
+  const onFailedToLoadGift = useCallback(
+    (text: string) => {
+      toast({ text });
+      onDone();
+    },
+    [onDone, toast]
   );
+
+  const { gift, giftSource, wrapSource, wrapState } = useGiftInfo(
+    id,
+    onFailedToLoadGift
+  );
+  const currentUserId = useCurrentUser()?.uid;
+  const isOwner = currentUserId === gift?.createdById;
 
   const onEdit = undefined; // useCallback(() => {}, []);
 
@@ -61,7 +55,18 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
     });
   }, [gift, prompt, toast]);
 
-  const isOwner = useCurrentUser()?.uid === gift?.createdById;
+  useEffect(() => {
+    if (
+      gift &&
+      !isOwner &&
+      currentUserId &&
+      !gift.following.includes(currentUserId)
+    ) {
+      // Need to add our name to the following list
+      toggleFollow(gift, currentUserId, true);
+    }
+  }, [gift, isOwner, currentUserId]);
+
   const onShare = useCallback(() => {
     const url = Linking.createURL('gift', { queryParams: { id } });
 
@@ -98,8 +103,8 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   return (
     <ViewGift
       gift={gift}
-      giftSource={{ uri: cachedImageURI }}
-      wrapSource={cachedWrapSource}
+      giftSource={giftSource}
+      wrapSource={wrapSource}
       wrapState={wrapState}
       onNavigateToUnwrap={onNavigateToUnwrap}
       onEdit={isOwner ? onEdit : undefined}

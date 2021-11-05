@@ -5,8 +5,9 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { FAB, Portal, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Icon } from '../components';
+import { Icon, Icons } from '../components';
 import { HomeScreen, SettingsScreen } from '../screens';
+import { DemoScreen } from '../screens/gifts';
 import { NavProp } from './AppStack';
 
 const Tab = createBottomTabNavigator();
@@ -23,13 +24,13 @@ export const AppTabs = ({ navigation }: Props) => {
   return (
     <>
       <Tab.Navigator
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false, unmountOnBlur: true }}
         screenListeners={{
           state: (e) => {
             const { state } = e.data as {
               state: {
                 index: number;
-                routes: { name: 'Home' | 'Settings' }[];
+                routes: { name: 'Home' | 'Settings' | 'Demo' }[];
               };
             };
 
@@ -42,7 +43,16 @@ export const AppTabs = ({ navigation }: Props) => {
           name="Home"
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Icon name="gift" color={color} size={size} />
+              <Icon name={Icons.GIFT} color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          component={DemoScreen}
+          name="Demo"
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Icon name={Icons.DEMO} color={color} size={size} />
             ),
           }}
         />
@@ -52,7 +62,7 @@ export const AppTabs = ({ navigation }: Props) => {
           options={{
             title: 'Options',
             tabBarIcon: ({ color, size }) => (
-              <Icon name="settings" color={color} size={size} />
+              <Icon name={Icons.SETTINGS} color={color} size={size} />
             ),
             headerShown: false,
           }}
@@ -61,7 +71,7 @@ export const AppTabs = ({ navigation }: Props) => {
 
       <Portal>
         <FAB
-          visible={isFocused && currentTab === 'Home'}
+          visible={isFocused && ['Home', 'Settings'].includes(currentTab)}
           // MaterialIcons so that the icon is centered properly
           icon={(props) => <MaterialIcons name="add" {...props} />}
           style={[{ bottom: safeArea.bottom + 65 }, styles.fab]}

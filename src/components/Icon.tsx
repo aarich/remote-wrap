@@ -24,4 +24,8 @@ export const Icons: Record<string, IconName> = {
   FLAME: 'flame',
   INFO: 'info',
   HEART: 'heart',
+  UNFOLLOW: 'x',
+  GIFT: 'gift',
+  DEMO: 'play',
+  SETTINGS: 'settings',
 };

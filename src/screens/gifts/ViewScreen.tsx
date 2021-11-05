@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import { View } from '../../components';
 import { ViewContainer } from '../../containers/gifts';
 import { ScreenProps } from '../../navigation/AppStack';
@@ -12,12 +13,15 @@ export const ViewScreen = ({ route, navigation }: Props) => {
   const onDone = () => navigation.pop();
 
   return (
-    <View isSafe>
-      <ViewContainer
-        id={id}
-        onNavigateToUnwrap={onNavigateToUnwrap}
-        onDone={onDone}
-      />
+    <View isSafe style={styles.flex}>
+      <ScrollView style={styles.flex}>
+        <ViewContainer
+          id={id}
+          onNavigateToUnwrap={onNavigateToUnwrap}
+          onDone={onDone}
+        />
+      </ScrollView>
     </View>
   );
 };
+const styles = StyleSheet.create({ flex: { flex: 1 } });

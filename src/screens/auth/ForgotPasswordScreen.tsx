@@ -50,7 +50,6 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
           handleSubmit,
           handleBlur,
         }) => {
-          console.log(touched);
           return (
             <>
               <TextInput

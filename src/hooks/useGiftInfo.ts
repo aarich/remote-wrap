@@ -6,7 +6,8 @@ import { firestore } from '../config';
 import { dbValueToWrapState, Gift, WrapState } from '../utils';
 
 export const useGiftInfo = (
-  id: string
+  id: string,
+  onError: (message: string) => void
 ): {
   gift?: Gift;
   giftSource?: ImageSourcePropType;
@@ -16,14 +17,24 @@ export const useGiftInfo = (
   const [gift, setGift] = useState<Gift>();
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(firestore, 'gifts', id), (doc) => {
-      const data = doc.data();
-      // @ts-ignore
-      setGift({ ...data, id });
-    });
+    const unsub = onSnapshot(
+      doc(firestore, 'gifts', id),
+      (doc) => {
+        if (!doc.exists()) {
+          onError('Gift not found. Was it deleted?');
+          return;
+        }
 
-    return unsub;
-  }, [id]);
+        console.log(`successfully queried gift ${id}`);
+        const data = doc.data();
+        // @ts-ignore
+        setGift({ ...data, id });
+      },
+      (error) => console.warn(`failed to get gift ${id}`, error)
+    );
+
+    return () => unsub();
+  }, [id, onError]);
 
   const giftURI = useCachedImageUri(gift?.photoUID);
   const wrapSource = useAssetOrCachedImageSource(gift?.wrapUID);

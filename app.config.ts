@@ -27,7 +27,7 @@ const config: ExpoConfig = {
         data: [
           {
             scheme: 'https',
-            host: '*.mrarich.com',
+            host: 'presence.mrarich.com',
             pathPrefix: '/gift',
           },
         ],
@@ -36,12 +36,15 @@ const config: ExpoConfig = {
     ],
   },
   ios: {
+    bundleIdentifier: 'com.mrarich.presence',
+    appStoreUrl:
+      'https://apps.apple.com/app/apple-store/id1593320208?pt=117925864&ct=appconfig&mt=8',
     supportsTablet: true,
     infoPlist: {
       NSPhotoLibraryUsageDescription: 'Upload photos to share as a surprise',
       NSCameraUsageDescription: 'Take photos to share as a surprise',
     },
-    associatedDomains: ['applinks:https://presence.mrarich.com'],
+    associatedDomains: ['applinks:presence.mrarich.com'],
     config: {
       googleMobileAdsAppId: 'ca-app-pub-6949812709353975~8167043362',
     },
@@ -62,7 +65,6 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-
     MyVersion: '1.0',
   },
 };

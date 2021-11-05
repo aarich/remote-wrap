@@ -1,4 +1,8 @@
-import { EmailAuthProvider, linkWithCredential } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  linkWithCredential,
+} from 'firebase/auth';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -30,10 +34,20 @@ export const SignupScreen = ({ navigation }: Props) => {
   } = useTogglePasswordVisibility();
 
   const handleSignup = async ({ email, password }) => {
-    const credential = EmailAuthProvider.credential(email, password);
-    linkWithCredential(auth.currentUser, credential)
+    let signUpFn;
+    if (auth.currentUser) {
+      signUpFn = () =>
+        linkWithCredential(
+          auth.currentUser,
+          EmailAuthProvider.credential(email, password)
+        );
+    } else {
+      signUpFn = () => createUserWithEmailAndPassword(auth, email, password);
+    }
+
+    signUpFn()
       .then(() => {
-        console.log('done');
+        console.log('signed up user');
         navigation.popToTop();
       })
       .catch((e) => {

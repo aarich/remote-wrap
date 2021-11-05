@@ -1,6 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { ImageSourcePropType, View } from 'react-native';
-import { Card } from 'react-native-paper';
+import { Card, Paragraph } from 'react-native-paper';
 import { Button } from '../..';
 import { Gift, WrapState } from '../../../utils';
 import { giftCardStyles as styles } from '../styles';
@@ -30,6 +30,15 @@ export const ViewGift = memo(
     onDone,
     onShare,
   }: Props) => {
+    const [squareWidth, setSquareWidth] = useState(1);
+    let followCount: string;
+    if (gift.following.length == 0) {
+      followCount = 'no other users';
+    } else if (gift.following.length === 1) {
+      followCount = '1 other user';
+    } else {
+      followCount = `${gift.following.length} other users`;
+    }
     return (
       <View>
         <Card>
@@ -39,8 +48,10 @@ export const ViewGift = memo(
               aboveSource={wrapSource}
               belowSource={giftSource}
               state={wrapState}
-              onSetSquareWidth={() => null}
+              squareWidth={squareWidth}
+              onSetSquareWidth={setSquareWidth}
             />
+            <Paragraph>Gift viewed by {followCount}.</Paragraph>
           </Card.Content>
           <Card.Actions style={styles.flexEnd}>
             {onEdit ? (

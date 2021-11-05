@@ -1,4 +1,4 @@
-import { deleteDoc, doc } from '@firebase/firestore';
+import { deleteDoc, doc, updateDoc } from '@firebase/firestore';
 import { deleteObject, getDownloadURL, ref } from '@firebase/storage';
 import { v4 as uuid } from 'uuid';
 import { firestore, storage } from '../config';
@@ -23,3 +23,18 @@ export const deleteGift = (gift: Gift) =>
         !Object.values(StandardWrap).includes(gift.wrapUID as StandardWrap) &&
         deleteImage(gift.wrapUID)
     );
+
+export const toggleFollow = (gift: Gift, userId: string, follow: boolean) => {
+  const updates: Partial<Gift> = {
+    following: follow
+      ? [...gift.following, userId]
+      : gift.following.filter((id) => userId !== id),
+  };
+
+  const giftRef = doc(firestore, 'gifts', gift.id);
+  return updateDoc(giftRef, updates)
+    .then(() => console.log(`${follow ? 'Added' : 'Removed'} follow`))
+    .catch((error) =>
+      console.warn(`Failed to ${follow ? 'add' : 'remove'} follow`, error)
+    );
+};

@@ -15,10 +15,22 @@ export const getImageFromWrap = (wrap: StandardWrap) => {
       return Images.wrapping2;
     case StandardWrap.CHRISTMAS_3:
       return Images.wrapping3;
+    case StandardWrap.CHRISTMAS_4:
+      return Images.wrapping11;
     case StandardWrap.HOLIDAY_1:
       return Images.wrapping4;
     case StandardWrap.HOLIDAY_2:
       return Images.wrapping5;
+    case StandardWrap.HOLIDAY_3:
+      return Images.wrapping7;
+    case StandardWrap.BANANA:
+      return Images.wrapping6;
+    case StandardWrap.FLOWERS:
+      return Images.wrapping8;
+    case StandardWrap.PAPER:
+      return Images.wrapping9;
+    case StandardWrap.CONGRATS:
+      return Images.wrapping10;
   }
 };
 

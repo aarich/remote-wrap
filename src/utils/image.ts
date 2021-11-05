@@ -116,6 +116,9 @@ export const selectImage = async (
 export const getCachedUri = (guid: string) => FileSystem.cacheDirectory + guid;
 
 export const deleteCachedImage = (guid: string) => {
+  if (Platform.OS === 'web') {
+    return;
+  }
   const cachedURI = getCachedUri(guid);
   return FileSystem.getInfoAsync(cachedURI, { size: false }).then(
     ({ exists }) => exists && FileSystem.deleteAsync(cachedURI)

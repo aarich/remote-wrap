@@ -26,7 +26,7 @@ type Props = {
   onResetWrap: VoidFunction;
   onRemoveWrap: VoidFunction;
   onUncoverWrap: (x: number, y: number) => void;
-  onDone: VoidFunction;
+  onDone?: VoidFunction;
 };
 
 export const UnwrapGift = ({
@@ -39,7 +39,7 @@ export const UnwrapGift = ({
   onUncoverWrap,
   onDone,
 }: Props) => {
-  const [squareWidth, setSquareWidth] = useState(1);
+  const [squareWidth, setSquareWidth] = useState(100000);
   const [minHeight, setMinTextHeight] = useState<number>();
 
   const handleTouch = useCallback(
@@ -51,22 +51,22 @@ export const UnwrapGift = ({
   );
 
   const handleTextViewLayout = useCallback(
-    ({
-      nativeEvent: {
-        layout: { height },
-      },
-    }: LayoutChangeEvent) => setMinTextHeight(height),
+    (e: LayoutChangeEvent) => setMinTextHeight(e.nativeEvent.layout.height),
     []
   );
 
   return (
     <Card>
-      <Card.Title title={gift.title} subtitle={gift.message} />
+      <Card.Title
+        title={gift.title}
+        subtitle={gift.message}
+        subtitleNumberOfLines={100}
+      />
       <Card.Content style={giftCardStyles.zeroPadding}>
         <View
-          onTouchStart={({ nativeEvent: { locationX: x, locationY: y } }) =>
-            handleTouch(x, y)
-          }
+          onTouchStart={({ nativeEvent: { locationX: x, locationY: y } }) => {
+            handleTouch(x, y);
+          }}
         >
           <PanGestureHandler
             minDist={0}
@@ -79,7 +79,8 @@ export const UnwrapGift = ({
                 aboveSource={wrapSource}
                 belowSource={giftSource}
                 state={wrapState}
-                onSetSquareWidth={setSquareWidth}
+                squareWidth={squareWidth}
+                onSetSquareWidth={(w) => setSquareWidth(w)}
               />
             </Animated.View>
           </PanGestureHandler>
@@ -119,9 +120,15 @@ export const UnwrapGift = ({
         >
           Reveal
         </Button>
-        <Button style={giftCardStyles.button} onPress={onDone} mode="outlined">
-          Done
-        </Button>
+        {onDone ? (
+          <Button
+            style={giftCardStyles.button}
+            onPress={onDone}
+            mode="outlined"
+          >
+            Done
+          </Button>
+        ) : null}
       </Card.Actions>
     </Card>
   );

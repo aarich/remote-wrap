@@ -1,3 +1,7 @@
+import {
+  getFocusedRouteNameFromRoute,
+  RouteProp,
+} from '@react-navigation/core';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
@@ -44,12 +48,23 @@ export type ScreenProps<S extends keyof StackParamList> = StackScreenProps<
 const Stack = createNativeStackNavigator<StackParamList>();
 
 export const AppStack = () => {
+  const getOptions = (route: RouteProp<StackParamList, 'Tabs'>) => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+    switch (routeName) {
+      case 'Home':
+        return { title: 'Gifts' };
+      case 'Demo':
+        return { headerShown: false };
+      case 'Settings':
+        return { title: 'Options' };
+    }
+  };
   return (
     <Stack.Navigator screenOptions={{ headerLargeTitle: true }}>
       <Stack.Screen
         name="Tabs"
         component={AppTabs}
-        options={{ title: 'Gifts' }}
+        options={({ route }) => getOptions(route)}
       />
       <Stack.Screen
         name="Login"

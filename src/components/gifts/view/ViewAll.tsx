@@ -10,6 +10,7 @@ type Props = {
   followingGifts: Gift[];
   onNavigateToGift: (giftId: string) => void;
   onDeleteGift: (gift: Gift) => void;
+  onUnfollowGift: (gift: Gift) => void;
 };
 
 const ViewAll = ({
@@ -17,6 +18,7 @@ const ViewAll = ({
   followingGifts,
   onNavigateToGift,
   onDeleteGift,
+  onUnfollowGift,
 }: Props) => {
   return (
     <View isSafe style={styles.container}>
@@ -57,6 +59,7 @@ const ViewAll = ({
                   key={gift.id}
                   gift={gift}
                   onPress={() => onNavigateToGift(gift.id)}
+                  onDelete={() => onUnfollowGift(gift)}
                 />
               );
             })}

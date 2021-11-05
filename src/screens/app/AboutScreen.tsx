@@ -1,5 +1,5 @@
 import * as Linking from 'expo-linking';
-import React, { FC, ReactNode } from 'react';
+import React, { FC, Fragment, ReactNode } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Title, useTheme } from 'react-native-paper';
@@ -7,7 +7,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Constants from '../../config/constants';
 import { ScreenProps } from '../../navigation/AppStack';
 
-const p = (...c: ReactNode[]) => <Paragraph>{c}</Paragraph>;
+const p = (...c: ReactNode[]) => (
+  <Paragraph>
+    {Array.isArray(c) ? c.map((e, i) => <Fragment key={i}>{e}</Fragment>) : c}
+  </Paragraph>
+);
 const t = (text: string) => <Title>{text}</Title>;
 
 type Props = ScreenProps<'About'>;

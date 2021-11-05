@@ -31,10 +31,9 @@ export const ImageCarousel = ({ images, selected, onSelect }: Props) => {
   const borderColor = useTheme().colors.primary;
   const renderItem = ({ item, index }) => {
     const isSelected = index === selected;
-    const selectedStyle = isSelected && {
-      ...styles.selectedImage,
-      borderColor,
-    };
+    const selectedStyle =
+      isSelected && StyleSheet.flatten([styles.selectedImage, { borderColor }]);
+
     return (
       <Pressable onPress={() => onSelect(index === selected ? -1 : index)}>
         <Surface style={styles.imageContainer}>

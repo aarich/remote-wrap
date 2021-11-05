@@ -7,31 +7,27 @@ import {
 } from '@firebase/firestore';
 import { useNavigation } from '@react-navigation/core';
 import { StackActions } from '@react-navigation/routers';
-import { signOut, updateProfile } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import React, { useCallback, useEffect, useState } from 'react';
 import { LoadingIndicator } from '../../components';
-import { Settings } from '../../components/app';
 import { auth, firestore } from '../../config';
+import { SettingsContainer } from '../../containers/app';
 import { useCurrentUser, useToast } from '../../providers';
 
 export const SettingsScreen = () => {
   const user = useCurrentUser();
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [displayName, setDisplayName] = useState(user?.displayName);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const toast = useToast();
 
-  const logInOutTitle = user?.isAnonymous ? 'Log In' : 'Sign Out';
+  const logInOutTitle = !user || user.isAnonymous ? 'Log In' : 'Sign Out';
   const logInOutAction = useCallback(() => {
-    if (user?.isAnonymous) {
+    if (!user || user?.isAnonymous) {
       navigation.dispatch(StackActions.push('Signup'));
     } else {
-      signOut(auth)
-        .then(() => setDisplayName(undefined))
-        .catch((error) => console.log('Error logging out: ', error));
+      signOut(auth).catch((error) => console.log('Error logging out: ', error));
     }
-  }, [navigation, user?.isAnonymous]);
+  }, [navigation, user]);
 
   const deleteGiftsAction = useCallback(() => {
     const q = query(
@@ -53,17 +49,6 @@ export const SettingsScreen = () => {
       .finally(() => setIsLoading(false));
   }, [toast, user?.uid]);
 
-  const updateUserProfile = useCallback(() => {
-    updateProfile(auth.currentUser, { displayName }).then(() =>
-      setIsEditingName(false)
-    );
-  }, [displayName]);
-
-  const handleCancelEditingName = useCallback(() => {
-    setDisplayName(user?.displayName);
-    setIsEditingName(false);
-  }, [user?.displayName]);
-
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
@@ -73,16 +58,10 @@ export const SettingsScreen = () => {
   }
 
   return (
-    <Settings
-      displayName={displayName}
-      setDisplayName={setDisplayName}
-      isEditingName={isEditingName}
-      setIsEditingName={setIsEditingName}
-      onCancelEditingName={handleCancelEditingName}
+    <SettingsContainer
       logInOutTitle={logInOutTitle}
       onLogInOut={logInOutAction}
-      onDeleteGifts={deleteGiftsAction}
-      onSaveUserProfile={updateUserProfile}
+      onDeleteGifts={user ? deleteGiftsAction : undefined}
       onNavigate={(screen) => navigation.dispatch(StackActions.push(screen))}
     />
   );

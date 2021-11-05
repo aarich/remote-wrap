@@ -1,10 +1,11 @@
 import { addDoc, collection, serverTimestamp } from '@firebase/firestore';
 import { ref, uploadBytesResumable, UploadTask } from '@firebase/storage';
+import { signInAnonymously } from 'firebase/auth';
 import React, { ComponentProps, useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { NewGift } from '../../components/gifts';
 import { WrappingPaperSelector } from '../../components/gifts/create/WrappingPaperSelector';
-import { firestore, storage } from '../../config';
+import { auth, firestore, storage } from '../../config';
 import { NavProp } from '../../navigation/AppStack';
 import { usePrompt, useToast } from '../../providers';
 import { useCurrentUser } from '../../providers/AuthenticatedUserProvider';
@@ -42,6 +43,14 @@ export const NewGiftContainer = ({ navigation }: Props) => {
         wrap as StandardWrap
       );
 
+      if (!user) {
+        console.log('Signing in anonymously');
+        await signInAnonymously(auth);
+        console.log(`Signed in as ${auth.currentUser.uid}`);
+      }
+
+      const createdById = auth.currentUser.uid;
+
       const createGiftDoc = (photoUID: string, wrapUID: string) => {
         // Success!
         const { title, message, age } = values;
@@ -49,7 +58,7 @@ export const NewGiftContainer = ({ navigation }: Props) => {
           title,
           message,
           age: age ? parseInt(age) : -1,
-          createdById: user?.uid,
+          createdById,
           createdOn: serverTimestamp(),
           following: [],
           photoUID,
@@ -59,10 +68,12 @@ export const NewGiftContainer = ({ navigation }: Props) => {
 
         addDoc(collection(firestore, 'gifts'), doc)
           .then((docRef) => {
+            console.log('Created new gift');
             navigation.replace('View', { id: docRef.id });
             toast({ text: 'Created!' });
           })
           .catch((error) => {
+            console.log('Failed to create gift');
             setImageUploadProgress(undefined);
             toast({ text: error.message, color: 'error', duration: 5000 });
           });
@@ -115,13 +126,13 @@ export const NewGiftContainer = ({ navigation }: Props) => {
         }
       );
     },
-    [image, navigation, toast, user?.uid, wrap]
+    [image, navigation, toast, user, wrap]
   );
 
   const onPressImageSelector = useCallback(() => {
     selectImage(
       prompt,
-      'Choose the image that shows your gift. This will be covered by the wrapping paper'
+      'Choose the image that shows your gift. This will be hidden by the wrapping paper'
     ).then((uri) => {
       uri && setImage(uri);
     });

@@ -8,8 +8,6 @@
 
 ### Work
 
-- [ ] Add meta tag for safari
-- [ ] Following
 - [ ] deep linking
 
 ### Thanks

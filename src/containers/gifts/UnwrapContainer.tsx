@@ -10,6 +10,7 @@ import { LoadingIndicator } from '../../components';
 import { UnwrapGift } from '../../components/gifts';
 import { firestore } from '../../config';
 import { useGiftInfo } from '../../hooks/useGiftInfo';
+import { useToast } from '../../providers';
 import {
   FULLY_UNWRAPPED_STATE,
   FULLY_WRAPPED_STATE,
@@ -24,12 +25,20 @@ type Props = { id: string; onDone: VoidFunction };
 const THROTTLE_INTERVAL_MS = 3000;
 
 export const UnwrapContainer = ({ id, onDone }: Props) => {
+  const toast = useToast();
+  const onLoadError = useCallback(
+    (text) => {
+      toast({ text });
+      onDone();
+    },
+    [onDone, toast]
+  );
   const {
     gift,
     giftSource,
     wrapSource,
     wrapState: wrapStateFirestore,
-  } = useGiftInfo(id);
+  } = useGiftInfo(id, onLoadError);
   const wrapStateRef = useRef(wrapStateFirestore);
   const [wrapState, setWrapState] = useState(wrapStateFirestore);
   const hasWrapStateChanged = useRef(false);
@@ -55,7 +64,11 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
       };
 
       const giftRef = doc(firestore, 'gifts', id);
-      updateDoc(giftRef, updates);
+      updateDoc(giftRef, updates)
+        .then(() => console.log('Updated wrapping state'))
+        .catch((error) =>
+          console.warn('failed to update wrapping state', error)
+        );
     }
   }, [hasWrapStateChanged, id]);
 
