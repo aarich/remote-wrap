@@ -51,7 +51,9 @@ export const ViewGift = memo(
               squareWidth={squareWidth}
               onSetSquareWidth={setSquareWidth}
             />
-            <Paragraph>Gift viewed by {followCount}.</Paragraph>
+            <Paragraph style={styles.text}>
+              Gift viewed by {followCount}.
+            </Paragraph>
           </Card.Content>
           <Card.Actions style={styles.flexEnd}>
             {onEdit ? (

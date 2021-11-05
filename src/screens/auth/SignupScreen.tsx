@@ -14,7 +14,7 @@ import {
   TextInput,
   View,
 } from '../../components';
-import { auth, Images } from '../../config';
+import { auth } from '../../config';
 import { useTogglePasswordVisibility } from '../../hooks';
 import { ScreenProps } from '../../navigation/AppStack';
 import { formStyles, signupValidationSchema } from '../../utils';
@@ -62,7 +62,7 @@ export const SignupScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={formStyles.logoContainer}>
-          <Logo uri={Images.logo} />
+          <Logo />
           <Headline>Create account</Headline>
         </View>
 

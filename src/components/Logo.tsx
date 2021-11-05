@@ -1,10 +1,11 @@
-import React, { ComponentProps } from 'react';
+import { useTheme } from '@react-navigation/native';
+import React from 'react';
 import { Image, StyleSheet } from 'react-native';
+import { Images } from '../config';
 
-type Props = {
-  uri: ComponentProps<typeof Image>['source'];
-};
-export const Logo = ({ uri }: Props) => {
+export const Logo = () => {
+  const isDark = useTheme().dark;
+  const uri = isDark ? Images.logoForDarkMode : Images.logoForLightMode;
   return <Image source={uri} style={styles.image} />;
 };
 

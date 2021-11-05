@@ -43,3 +43,6 @@ Temporary Items
 
 # Firebase
 .firebase/*
+
+# Until storybook is set up
+storybook

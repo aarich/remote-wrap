@@ -1,5 +1,6 @@
 export const Images = {
-  logo: require('../../assets/gift-outline-white-background.png'),
+  logoForLightMode: require('../../assets/gift-outline.png'),
+  logoForDarkMode: require('../../assets/gift-icon-white.png'),
   wrapping1: require('../../assets/wraps/wrapping1.jpg'),
   wrapping2: require('../../assets/wraps/wrapping2.jpg'),
   wrapping3: require('../../assets/wraps/wrapping3.jpg'),

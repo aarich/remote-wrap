@@ -3,7 +3,6 @@ import {
   Animated,
   ImageSourcePropType,
   LayoutChangeEvent,
-  StyleSheet,
   View,
 } from 'react-native';
 import { PanGestureHandler } from 'react-native-gesture-handler';
@@ -86,7 +85,7 @@ export const UnwrapGift = ({
           </PanGestureHandler>
         </View>
         <View
-          style={[styles.text, { minHeight }]}
+          style={[giftCardStyles.text, { minHeight }]}
           onLayout={handleTextViewLayout}
         >
           {wrapState === FULLY_UNWRAPPED_STATE ? (
@@ -133,7 +132,3 @@ export const UnwrapGift = ({
     </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  text: { margin: 10 },
-});

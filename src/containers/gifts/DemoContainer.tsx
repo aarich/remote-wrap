@@ -12,17 +12,22 @@ import {
   WRAP_WIDTH,
 } from '../../utils';
 
+export const isScreenshotting = false;
+const title = isScreenshotting ? 'Happy Holidays, Alex!' : 'Sample';
+const message = isScreenshotting
+  ? undefined
+  : 'Gifts include two images: a wrapping paper and the hidden gift. The recipient scratches off the wrapping paper to reveal your gift, which anyone can watch in real time!\nGive it a try! Scratch the image below.';
+
 const DEMO_GIFT: Gift = {
   createdById: '',
   id: '',
   createdOn: serverTimestamp(),
   following: [],
   photoUID: '',
-  title: 'Sample',
+  title,
   wrapState: '',
   wrapUID: '',
-  message:
-    'Gifts include two images: a wrapping paper and the hidden gift. The recipient scratches off the wrapping paper to reveal your gift, which anyone can watch in real time!\nGive it a try! Scratch the image below.',
+  message,
 };
 
 const randomDemo = () => `demo${Math.floor(Math.random() * DEMO_IMAGES_COUNT)}`;

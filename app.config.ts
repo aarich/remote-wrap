@@ -6,14 +6,14 @@ const config: ExpoConfig = {
   slug: 'remote-wrap',
   privacy: 'hidden',
   platforms: ['ios', 'android', 'web'],
-  version: '0.0.1',
+  version: '1.0',
   scheme: 'remotewrap',
   orientation: 'portrait',
   icon: './assets/gift-outline-white-background.png',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'cover',
-    backgroundColor: '#F57C00',
+    backgroundColor: '#3d3d3d',
   },
   updates: {
     fallbackToCacheTimeout: 3000,
@@ -65,7 +65,7 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-    MyVersion: '1.0',
+    MyVersion: '1',
   },
 };
 

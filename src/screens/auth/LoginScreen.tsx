@@ -11,7 +11,7 @@ import {
   TextInput,
   View,
 } from '../../components';
-import { auth, Images } from '../../config';
+import { auth } from '../../config';
 import { useTogglePasswordVisibility } from '../../hooks';
 import { NavProp } from '../../navigation/AppStack';
 import { formStyles, loginValidationSchema } from '../../utils';
@@ -43,7 +43,7 @@ export const LoginScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={formStyles.logoContainer}>
-          <Logo uri={Images.logo} />
+          <Logo />
           <Headline>Welcome back!</Headline>
         </View>
         <Formik
