@@ -40,3 +40,6 @@ Temporary Items
 
 # Project related
 .env
+
+# Firebase
+.firebase/*

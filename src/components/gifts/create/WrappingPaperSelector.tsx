@@ -30,7 +30,7 @@ export const WrappingPaperSelector = ({
     <Portal>
       <Modal visible={visible} onDismiss={onRequestClose}>
         <Card>
-          <Card.Title title="Choose your wrapping paper" />
+          <Card.Title title="Choose wrapping paper" />
           <Card.Content style={styles.noPadding}>
             <ImageCarousel
               images={images}

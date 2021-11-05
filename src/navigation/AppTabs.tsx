@@ -24,7 +24,7 @@ export const AppTabs = ({ navigation }: Props) => {
   return (
     <>
       <Tab.Navigator
-        screenOptions={{ headerShown: false, unmountOnBlur: true }}
+        screenOptions={{ headerShown: false }}
         screenListeners={{
           state: (e) => {
             const { state } = e.data as {

@@ -1,7 +1,6 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Text } from 'react-native-paper';
 import { Button, FormErrorMessage, LoadingIndicator, TextInput } from '../..';
 import { formStyles, newGiftValidationSchema } from '../../../utils';
 
@@ -108,7 +107,6 @@ export const NewGift = ({
             >
               Create
             </Button>
-            <Text style={formStyles.button}>You can share after creating.</Text>
           </>
         )}
       </Formik>

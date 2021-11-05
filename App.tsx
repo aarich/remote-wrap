@@ -1,14 +1,14 @@
 import React from 'react';
 import { LogBox, useColorScheme } from 'react-native';
 import 'react-native-get-random-values';
-import {
-  DarkTheme,
-  DefaultTheme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Icon } from './src/components';
-import { RootNavigator } from './src/navigation/RootNavigator';
+import {
+  CombinedDarkTheme,
+  CombinedLightTheme,
+  RootNavigator,
+} from './src/navigation/RootNavigator';
 import {
   AuthenticatedUserProvider,
   PromptProvider,
@@ -22,7 +22,7 @@ const App = () => {
 
   return (
     <PaperProvider
-      theme={isDark ? DarkTheme : DefaultTheme}
+      theme={isDark ? CombinedDarkTheme : CombinedLightTheme}
       settings={{
         // @ts-ignore
         icon: (props) => <Icon {...props} />,
