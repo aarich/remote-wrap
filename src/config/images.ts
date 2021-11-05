@@ -11,5 +11,10 @@ export const Images = {
   wrapping9: require('../../assets/wraps/wrapping9.jpeg'),
   wrapping10: require('../../assets/wraps/wrapping10.jpeg'),
   wrapping11: require('../../assets/wraps/wrapping11.jpeg'),
-  demoImage: require('../../assets/wraps/wrapping1.jpg'),
+  demo0: require('../../assets/car.jpeg'),
+  demo1: require('../../assets/brownie.jpeg'),
+  demo2: require('../../assets/puppy.jpeg'),
+  demo3: require('../../assets/kitten.jpeg'),
 };
+
+export const DEMO_IMAGES_COUNT = 4;

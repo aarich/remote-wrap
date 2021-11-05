@@ -1,6 +1,7 @@
 import { serverTimestamp } from '@firebase/firestore';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import { UnwrapGift } from '../../components/gifts';
+import { DEMO_IMAGES_COUNT } from '../../config/images';
 import { useAssetOrCachedImageSource } from '../../hooks';
 import {
   FULLY_UNWRAPPED_STATE,
@@ -17,15 +18,19 @@ const DEMO_GIFT: Gift = {
   createdOn: serverTimestamp(),
   following: [],
   photoUID: '',
-  title: 'Unwrap Demo',
+  title: 'Sample',
   wrapState: '',
   wrapUID: '',
   message:
-    "To create a gift, choose two images: one as the wrapping paper and one as the hidden gift. The recipient of your gift will be able to scratch off the wrapping paper to reveal your gift. You'll be able to watch in real time!",
+    'Gifts include two images: a wrapping paper and the hidden gift. The recipient scratches off the wrapping paper to reveal your gift, which anyone can watch in real time!\nGive it a try! Scratch the image below.',
 };
+
+const randomDemo = () => `demo${Math.floor(Math.random() * DEMO_IMAGES_COUNT)}`;
 
 export const DemoContainer = () => {
   const [wrapState, setWrapState] = useState<WrapState>(FULLY_WRAPPED_STATE);
+  const [demoImage, resetDemo] = useReducer(randomDemo, randomDemo());
+
   const onUncover = useCallback(
     (x, y) => {
       let newWrapState: boolean[][];
@@ -63,7 +68,7 @@ export const DemoContainer = () => {
     setWrapState(b);
   }, []);
 
-  const giftSource = useAssetOrCachedImageSource('demoImage', 'image');
+  const giftSource = useAssetOrCachedImageSource(demoImage, 'image');
   const wrapSource = useAssetOrCachedImageSource(StandardWrap.CHRISTMAS_4);
 
   return (
@@ -73,7 +78,10 @@ export const DemoContainer = () => {
       wrapSource={wrapSource}
       wrapState={wrapState}
       onUncoverWrap={onUncover}
-      onResetWrap={() => setAllWrap(FULLY_WRAPPED_STATE)}
+      onResetWrap={() => {
+        setAllWrap(FULLY_WRAPPED_STATE);
+        resetDemo();
+      }}
       onRemoveWrap={() => setAllWrap(FULLY_UNWRAPPED_STATE)}
     />
   );

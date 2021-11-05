@@ -12,13 +12,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { LoadingIndicator } from '../../components';
 import { auth, firestore } from '../../config';
 import { SettingsContainer } from '../../containers/app';
-import { useCurrentUser, useToast } from '../../providers';
+import { useCurrentUser, usePrompt, useToast } from '../../providers';
 
 export const SettingsScreen = () => {
   const user = useCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const toast = useToast();
+  const prompt = usePrompt();
 
   const logInOutTitle = !user || user.isAnonymous ? 'Log In' : 'Sign Out';
   const logInOutAction = useCallback(() => {
@@ -30,24 +31,33 @@ export const SettingsScreen = () => {
   }, [navigation, user]);
 
   const deleteGiftsAction = useCallback(() => {
-    const q = query(
-      collection(firestore, 'gifts'),
-      where('createdById', '==', user?.uid)
-    );
-    setIsLoading(true);
-    getDocs(q)
-      .then((snapshot) => {
-        const promises = [];
-        snapshot.forEach((doc) => promises.push(deleteDoc(doc.ref)));
+    const doDelete = () => {
+      const q = query(
+        collection(firestore, 'gifts'),
+        where('createdById', '==', user?.uid)
+      );
+      setIsLoading(true);
+      getDocs(q)
+        .then((snapshot) => {
+          const promises = [];
+          snapshot.forEach((doc) => promises.push(deleteDoc(doc.ref)));
 
-        const message =
-          snapshot.size === 1 ? '1 gift' : `${snapshot.size} gifts`;
-        return Promise.all(promises).then(() =>
-          toast({ text: `Deleted ${message}.` })
-        );
-      })
-      .finally(() => setIsLoading(false));
-  }, [toast, user?.uid]);
+          const message =
+            snapshot.size === 1 ? '1 gift' : `${snapshot.size} gifts`;
+          return Promise.all(promises).then(() =>
+            toast({ text: `Deleted ${message}.` })
+          );
+        })
+        .finally(() => setIsLoading(false));
+    };
+
+    prompt({
+      title: 'Are you sure',
+      message:
+        'Everyone will lose access to all gifts created by you. This is not reversible.',
+      actions: [{ text: 'Delete them', onPress: doDelete }, { text: 'Cancel' }],
+    });
+  }, [prompt, toast, user?.uid]);
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
