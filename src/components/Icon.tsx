@@ -8,7 +8,30 @@ export const Icon = (props: Props) => {
   return <Octicons {...props} />;
 };
 
-export const Icons: Record<string, IconName> = {
+type IconKey =
+  | 'EDIT'
+  | 'SIGN_IN'
+  | 'SIGN_OUT'
+  | 'TRASH'
+  | 'CANCEL'
+  | 'PERSON'
+  | 'CHECK'
+  | 'EMAIL'
+  | 'PASSWORD'
+  | 'PLUS'
+  | 'CHEVRON_RIGHT'
+  | 'OPEN'
+  | 'SHARE'
+  | 'LINK'
+  | 'FLAME'
+  | 'INFO'
+  | 'HEART'
+  | 'UNFOLLOW'
+  | 'GIFT'
+  | 'DEMO'
+  | 'SETTINGS';
+
+export const Icons: Record<IconKey, IconName> = {
   EDIT: 'pencil',
   SIGN_IN: 'sign-in',
   SIGN_OUT: 'sign-out',
@@ -22,6 +45,7 @@ export const Icons: Record<string, IconName> = {
   CHEVRON_RIGHT: 'chevron-right',
   OPEN: 'unfold',
   SHARE: 'link-external',
+  LINK: 'link',
   FLAME: 'flame',
   INFO: 'info',
   HEART: 'heart',

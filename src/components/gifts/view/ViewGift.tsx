@@ -1,9 +1,9 @@
 import React, { memo, useState } from 'react';
-import { ImageSourcePropType, View } from 'react-native';
-import { Card, Paragraph } from 'react-native-paper';
-import { Button } from '../..';
+import { ImageSourcePropType, Platform, View } from 'react-native';
+import { Card, Divider, Menu, Paragraph } from 'react-native-paper';
+import { Button, IconName, Icons } from '../..';
 import { Gift, WrapState } from '../../../utils';
-import { giftCardStyles as styles } from '../styles';
+import { giftCardStyles, giftCardStyles as styles } from '../styles';
 import CoveredImage from '../unwrap/CoveredImage';
 
 type Props = {
@@ -32,18 +32,46 @@ export const ViewGift = memo(
     onShare,
     onOpenInApp,
   }: Props) => {
+    const [menuVisible, setMenuVisible] = useState(false);
+
     const [squareWidth, setSquareWidth] = useState(1);
     let followCount: string;
     if (gift.following.length == 0) {
-      followCount = 'no other logged in users';
+      followCount = 'No logged-in users have seen this yet.';
     } else if (gift.following.length === 1) {
-      followCount = '1 other logged in user';
+      followCount = 'Gift viewed by 1 other logged in user.';
     } else {
-      followCount = `${gift.following.length} other logged in users`;
+      followCount = `Gift viewed by ${gift.following.length} other logged in users.`;
     }
+
+    const menuItems: (
+      | undefined
+      | { onPress: VoidFunction; title: string; icon: IconName }
+    )[] = [
+      {
+        title: 'Share',
+        onPress: onShare,
+        icon: Platform.select({ web: Icons.LINK, default: Icons.SHARE }),
+      },
+      undefined,
+    ];
+    if (onOpenInApp) {
+      menuItems.push({
+        onPress: onOpenInApp,
+        title: 'Open In App',
+        icon: Icons.SHARE,
+      });
+    }
+    if (onEdit) {
+      menuItems.push({ onPress: onEdit, title: 'Edit', icon: Icons.EDIT });
+    }
+    if (onDelete) {
+      menuItems.push({ onPress: onDelete, title: 'Delete', icon: Icons.TRASH });
+    }
+
     return (
       <View>
-        <Card>
+        <Card style={giftCardStyles.card}>
           <Card.Title title={gift.title} subtitle={gift.message} />
           <Card.Content style={styles.zeroPadding}>
             <CoveredImage
@@ -53,29 +81,33 @@ export const ViewGift = memo(
               squareWidth={squareWidth}
               onSetSquareWidth={setSquareWidth}
             />
-            <Paragraph style={styles.text}>
-              Gift viewed by {followCount}.
-            </Paragraph>
+            <Paragraph style={styles.text}>{followCount}</Paragraph>
           </Card.Content>
           <Card.Actions style={styles.flexEnd}>
-            {onOpenInApp ? (
-              <Button onPress={onOpenInApp} style={styles.button}>
-                Open In App
-              </Button>
-            ) : null}
-            {onEdit ? (
-              <Button onPress={onEdit} style={styles.button}>
-                Edit
-              </Button>
-            ) : null}
-            {onDelete ? (
-              <Button onPress={onDelete} style={styles.button}>
-                Delete
-              </Button>
-            ) : null}
-            <Button onPress={onShare} style={styles.button}>
-              Share
-            </Button>
+            <Menu
+              visible={menuVisible}
+              onDismiss={() => setMenuVisible(false)}
+              anchor={
+                <Button onPress={() => setMenuVisible(true)}>More</Button>
+              }
+            >
+              {menuItems.map((m, i) =>
+                m ? (
+                  <Menu.Item
+                    key={i}
+                    title={m.title}
+                    onPress={() => {
+                      setMenuVisible(false);
+                      m.onPress();
+                    }}
+                    icon={m.icon}
+                  />
+                ) : (
+                  <Divider key={i} />
+                )
+              )}
+            </Menu>
+
             <Button mode="outlined" onPress={onDone} style={styles.button}>
               Back
             </Button>

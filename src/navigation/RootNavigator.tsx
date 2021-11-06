@@ -3,6 +3,7 @@ import {
   DefaultTheme as NavLightTheme,
   NavigationContainer,
 } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
@@ -27,6 +28,14 @@ export const CombinedLightTheme = {
   colors: { ...PaperLightTheme.colors, ...NavLightTheme.colors },
 };
 
+function getActiveRouteName(navigationState) {
+  if (!navigationState) return null;
+  const route = navigationState.routes[navigationState.index];
+  // Parse the nested navigators
+  if (route.routes) return getActiveRouteName(route);
+  return route.routeName;
+}
+
 export const RootNavigator = () => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +45,10 @@ export const RootNavigator = () => {
       onAuthStateChanged(auth, (authenticatedUser) => {
         setIsLoading(false);
         setUser(authenticatedUser);
+        Analytics.setUserId(auth.currentUser?.uid || null);
+        Analytics.setUserProperties({
+          anonymous: `${auth.currentUser?.isAnonymous || false}`,
+        });
       }),
     [setUser, user]
   );
@@ -49,6 +62,10 @@ export const RootNavigator = () => {
   return (
     <NavigationContainer
       theme={isDark ? CombinedDarkTheme : CombinedLightTheme}
+      onStateChange={(state) => {
+        const currentScreen = getActiveRouteName(state);
+        Analytics.setCurrentScreen(currentScreen);
+      }}
     >
       <AppStack />
     </NavigationContainer>

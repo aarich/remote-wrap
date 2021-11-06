@@ -50,6 +50,7 @@ export const Settings = ({
                   )
                 : listIcon(Icons.SIGN_OUT)
             }
+            right={listIcon(Icons.CHEVRON_RIGHT)}
           />
           {onDeleteGifts ? (
             <List.Item

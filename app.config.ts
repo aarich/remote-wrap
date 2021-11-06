@@ -20,6 +20,8 @@ const config: ExpoConfig = {
   },
   assetBundlePatterns: ['**/*'],
   android: {
+    package: 'rich.alex.presence',
+    googleServicesFile: './google-services.json',
     permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE'],
     intentFilters: [
       {
@@ -39,6 +41,7 @@ const config: ExpoConfig = {
     bundleIdentifier: 'com.mrarich.presence',
     appStoreUrl:
       'https://apps.apple.com/app/apple-store/id1593320208?pt=117925864&ct=appconfig&mt=8',
+    googleServicesFile: './GoogleService-Info.plist',
     supportsTablet: true,
     infoPlist: {
       NSPhotoLibraryUsageDescription: 'Upload photos to share as a surprise',
@@ -55,6 +58,16 @@ const config: ExpoConfig = {
     backgroundColor: '#000',
     description: 'An app for sharing gifts remotely',
     themeColor: '#000',
+    config: {
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.AUTH_DOMAIN,
+      databaseURL: process.env.DATABASE_URL,
+      projectId: process.env.PROJECT_ID,
+      storageBucket: process.env.STORAGE_BUCKET,
+      messagingSenderId: process.env.MESSAGING_SENDER_ID,
+      appId: process.env.APP_ID,
+      measurementId: process.env.MEASUREMENT_ID,
+    },
   },
   userInterfaceStyle: 'automatic',
   extra: {
@@ -66,7 +79,7 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-    MyVersion: '1',
+    MyVersion: '2',
   },
 };
 

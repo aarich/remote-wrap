@@ -116,10 +116,6 @@ export const ViewAllContainer = () => {
     (id: string) => navigation.dispatch(StackActions.push('View', { id })),
     [navigation]
   );
-  const onNavigateToSignup = useCallback(
-    () => navigation.push('Signup'),
-    [navigation]
-  );
 
   return (
     <ViewAll
@@ -128,7 +124,6 @@ export const ViewAllContainer = () => {
       onDeleteGift={onDeleteGift}
       onUnfollowGift={onUnfollowGift}
       onNavigateToGift={onNavigateToGift}
-      onNavigateToSignup={onNavigateToSignup}
     />
   );
 };
