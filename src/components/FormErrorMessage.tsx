@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 
-type Props = { error?: string; visible: boolean };
+type Props = { error?: string; visible?: boolean };
 
 export const FormErrorMessage = ({ error, visible }: Props) => {
   const theme = useTheme();

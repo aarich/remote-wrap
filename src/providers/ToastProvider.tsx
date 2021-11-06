@@ -68,7 +68,7 @@ export const ToastProvider: FC = ({ children }) => {
   }, [ctx]);
 
   const theme = useTheme();
-  const style = {
+  const style = ctx.toast.color && {
     backgroundColor: theme.colors[ctx.toast.color],
   };
 

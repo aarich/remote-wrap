@@ -42,8 +42,8 @@ export const AboutScreen: FC<Props> = () => {
         'To share a present, simply hit the create button on the home screen. Upload a photo, choose a wrapping paper, and share the link!'
       )}
       {p(
-        'The gift recipient can open the gift in the app or in a browser and scrub off the wrapping paper.' +
-          'All the while, you can watch on your own device.'
+        'The gift recipient can open the gift in the app or in a browser and scrub off the wrapping paper. ' +
+          'Meanwhile, you can watch on your own device.'
       )}
       {p(
         'Note that anyone with the link can access your uploads until you delete them.'

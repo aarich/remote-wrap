@@ -56,6 +56,10 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
   }, [hasWrapStateBeenLoaded, wrapStateFirestore]);
 
   const updateWrapStateInFirebase = useCallback(() => {
+    if (typeof wrapStateRef.current === 'undefined') {
+      return;
+    }
+
     if (hasWrapStateChanged.current) {
       hasWrapStateChanged.current = false;
 
@@ -123,7 +127,12 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!gift) {
+  if (
+    !gift ||
+    !giftSource ||
+    typeof wrapSource === 'undefined' ||
+    typeof wrapState === 'undefined'
+  ) {
     return <LoadingIndicator />;
   }
 

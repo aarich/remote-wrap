@@ -1,6 +1,7 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { TextInput as RNTextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Headline } from 'react-native-paper';
 import {
@@ -28,13 +29,17 @@ export const LoginScreen = ({ navigation }: Props) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => navigation.popToTop())
       .catch((error) => {
-        if (error.code === 'auth/user-not-found') {
+        if (
+          ['auth/user-not-found', 'auth/wrong-password'].includes(error.code)
+        ) {
           setErrorState('The information provided did not match our records');
         } else {
           setErrorState(error.message);
         }
       });
   };
+
+  const passwordRef = useRef<RNTextInput>(null);
 
   return (
     <View isSafe style={formStyles.container}>
@@ -69,14 +74,16 @@ export const LoginScreen = ({ navigation }: Props) => {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 textContentType="emailAddress"
-                autoFocus={true}
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 style={formStyles.textInput}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
               <TextInput
+                ref={passwordRef}
                 label="Password"
                 leftIcon={Icons.PASSWORD}
                 autoCapitalize="none"
@@ -89,6 +96,8 @@ export const LoginScreen = ({ navigation }: Props) => {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 style={formStyles.textInput}
+                returnKeyType="go"
+                onSubmitEditing={() => handleSubmit()}
               />
               <FormErrorMessage
                 error={errors.password}
@@ -105,7 +114,7 @@ export const LoginScreen = ({ navigation }: Props) => {
                 onPress={handleSubmit}
                 disabled={!!(errors.email || errors.password)}
               >
-                Login
+                Log in
               </Button>
             </>
           )}

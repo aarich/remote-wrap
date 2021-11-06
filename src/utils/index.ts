@@ -29,7 +29,7 @@ export const passwordResetSchema = Yup.object().shape({
 
 export const newGiftValidationSchema: Yup.SchemaOf<{
   title: string;
-  message: string;
+  message?: string;
 }> = Yup.object().shape({
   title: Yup.string().required().label('Title'),
   message: Yup.string().label('Message'),

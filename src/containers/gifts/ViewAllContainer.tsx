@@ -9,6 +9,7 @@ import { StackActions, useNavigation } from '@react-navigation/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ViewAll } from '../../components/gifts';
 import { firestore } from '../../config';
+import { NavProp } from '../../navigation/AppStack';
 import { useCurrentUser, usePrompt, useToast } from '../../providers';
 import { deleteGift, Gift, toggleFollow } from '../../utils';
 
@@ -19,6 +20,7 @@ const snapshot = (
   userId?: string
 ) => {
   if (!userId) {
+    setter([]);
     return;
   }
 
@@ -26,9 +28,10 @@ const snapshot = (
     query(collection(firestore, 'gifts'), queryConstraint),
     (snapshot) => {
       console.log(`received ${snapshot.size} docs for ${actionMessage}`);
-      const received = [];
+      const received: Gift[] = [];
       snapshot.forEach((doc) => {
         const id = doc.id;
+        // @ts-ignore
         received.push({ ...doc.data(), id });
       });
       setter(received);
@@ -42,8 +45,8 @@ const snapshot = (
 export const ViewAllContainer = () => {
   const toast = useToast();
   const prompt = usePrompt();
-  const naviation = useNavigation();
-  const userId = useCurrentUser()?.uid;
+  const navigation = useNavigation<NavProp<never>>();
+  const user = useCurrentUser();
   const [myGifts, setMyGifts] = useState<Gift[]>([]);
   const [followingGifts, setFollowingGifts] = useState<Gift[]>([]);
 
@@ -51,24 +54,24 @@ export const ViewAllContainer = () => {
   useEffect(
     () =>
       snapshot(
-        `created by ${userId}`,
-        where('createdById', '==', userId),
+        `created by ${user?.uid}`,
+        where('createdById', '==', user?.uid),
         setMyGifts,
-        userId
+        user?.uid
       ),
-    [userId]
+    [user?.uid]
   );
 
   // Load gifts I'm following
   useEffect(
     () =>
       snapshot(
-        `followed by ${userId}`,
-        where('following', 'array-contains', userId),
+        `followed by ${user?.uid}`,
+        where('following', 'array-contains', user?.uid),
         setFollowingGifts,
-        userId
+        user?.uid
       ),
-    [userId]
+    [user?.uid]
   );
 
   const onDeleteGift = useCallback(
@@ -90,6 +93,7 @@ export const ViewAllContainer = () => {
 
   const onUnfollowGift = useCallback(
     (gift: Gift) =>
+      user &&
       prompt({
         title: 'Remove',
         message:
@@ -98,19 +102,23 @@ export const ViewAllContainer = () => {
           {
             text: 'Remove',
             onPress: () =>
-              toggleFollow(gift, userId, false).then(() =>
+              toggleFollow(gift, user.uid, false).then(() =>
                 toast({ text: 'Removed gift.' })
               ),
           },
           { text: 'Cancel' },
         ],
       }),
-    [prompt, toast, userId]
+    [prompt, toast, user]
   );
 
   const onNavigateToGift = useCallback(
-    (id: string) => naviation.dispatch(StackActions.push('View', { id })),
-    [naviation]
+    (id: string) => navigation.dispatch(StackActions.push('View', { id })),
+    [navigation]
+  );
+  const onNavigateToSignup = useCallback(
+    () => navigation.push('Signup'),
+    [navigation]
   );
 
   return (
@@ -118,8 +126,9 @@ export const ViewAllContainer = () => {
       myGifts={myGifts}
       followingGifts={followingGifts}
       onDeleteGift={onDeleteGift}
-      onNavigateToGift={onNavigateToGift}
       onUnfollowGift={onUnfollowGift}
+      onNavigateToGift={onNavigateToGift}
+      onNavigateToSignup={onNavigateToSignup}
     />
   );
 };

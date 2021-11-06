@@ -62,6 +62,7 @@ export const ForgotPasswordScreen = ({ navigation }: Props) => {
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 style={formStyles.textInput}
+                returnKeyType="go"
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
 

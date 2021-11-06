@@ -18,10 +18,10 @@ export const getImageURL = (photoUID: string) =>
 export const deleteGift = (gift: Gift) =>
   deleteDoc(doc(firestore, 'gifts', gift.id))
     .then(() => deleteImage(gift.photoUID))
-    .then(
-      () =>
-        !Object.values(StandardWrap).includes(gift.wrapUID as StandardWrap) &&
-        deleteImage(gift.wrapUID)
+    .then(() =>
+      !Object.values(StandardWrap).includes(gift.wrapUID as StandardWrap)
+        ? deleteImage(gift.wrapUID)
+        : undefined
     );
 
 export const toggleFollow = (gift: Gift, userId: string, follow: boolean) => {

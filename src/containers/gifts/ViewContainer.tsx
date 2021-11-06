@@ -1,8 +1,8 @@
 import * as Clipboard from 'expo-clipboard';
-import * as Linking from 'expo-linking';
+import Constants from 'expo-constants';
 import { isAvailableAsync as isSharingAvailable } from 'expo-sharing';
-import React, { useCallback, useEffect } from 'react';
-import { Share } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Linking, Platform, Share } from 'react-native';
 import { LoadingIndicator } from '../../components';
 import { ViewGift } from '../../components/gifts';
 import { useGiftInfo } from '../../hooks/useGiftInfo';
@@ -14,6 +14,8 @@ type Props = {
   onNavigateToUnwrap: VoidFunction;
   onDone: VoidFunction;
 };
+
+const makeShareUrl = (base: string, id: string) => `${base}gift?id=${id}`;
 
 export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   const prompt = usePrompt();
@@ -37,16 +39,17 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
 
   const onDelete = useCallback(() => {
     const performDelete = () => {
-      deleteGift(gift)
-        .then(() => toast({ text: 'Gift deleted.' }))
-        .catch((e) =>
-          toast({
-            text:
-              'Hmm.. Something went wrong. Please try again later. ' +
-              e.message,
-            color: 'error',
-          })
-        );
+      gift &&
+        deleteGift(gift)
+          .then(() => toast({ text: 'Gift deleted.' }))
+          .catch((e) =>
+            toast({
+              text:
+                'Hmm.. Something went wrong. Please try again later. ' +
+                e.message,
+              color: 'error',
+            })
+          );
     };
     prompt({
       title: 'Are you sure?',
@@ -68,13 +71,16 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   }, [gift, isOwner, currentUserId]);
 
   const onShare = useCallback(() => {
-    const url = Linking.createURL('gift', { queryParams: { id } });
+    const url = makeShareUrl(`https://presence.mrarich.com/`, id);
 
     isSharingAvailable().then((canShare) => {
       const actions: Parameters<typeof prompt>[0]['actions'] = [
         {
           text: 'Copy link to clipboard',
-          onPress: () => Clipboard.setString(url),
+          onPress: () => {
+            Clipboard.setString(url);
+            toast({ text: 'Copied!' });
+          },
         },
       ];
 
@@ -94,9 +100,23 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
         vertical: true,
       });
     });
-  }, [id, prompt]);
+  }, [id, prompt, toast]);
 
-  if (!gift) {
+  const [onOpenInApp, setOnOpenInApp] = useState<VoidFunction>();
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const url = makeShareUrl(Constants.manifest?.scheme + '://', id);
+      setOnOpenInApp(() => () => Linking.openURL(url));
+    }
+  }, [id]);
+
+  if (
+    !gift ||
+    !giftSource ||
+    typeof wrapSource === 'undefined' ||
+    typeof wrapState === 'undefined'
+  ) {
     return <LoadingIndicator />;
   }
 
@@ -111,6 +131,7 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
       onDelete={isOwner ? onDelete : undefined}
       onDone={onDone}
       onShare={onShare}
+      onOpenInApp={onOpenInApp}
     />
   );
 };

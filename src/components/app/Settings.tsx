@@ -1,19 +1,20 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { List } from 'react-native-paper';
-import { Icons, View } from '../.';
+import { Badge, List } from 'react-native-paper';
+import { Icons } from '../.';
 import { AdUnit } from '../../utils';
 import { IconName } from '../Icon';
 import { PotentialAd } from '../PotentialAd';
+import { View } from '../View';
 
 type Props = {
   onDeleteGifts?: () => void;
   onLogInOut: () => void;
-  logInOutTitle: string;
+  logInOutTitle: 'Log In' | 'Sign Out';
   onNavigate: (screen: 'About' | 'Storybook') => void;
-  onResetCache: VoidFunction;
-  onOpenStoreURL: VoidFunction;
+  onResetCache?: VoidFunction;
+  onOpenStoreURL?: VoidFunction;
   onShowAd?: VoidFunction;
   storage?: number;
 };
@@ -30,6 +31,7 @@ export const Settings = ({
   storage,
   logInOutTitle,
 }: Props) => {
+  const isLogIn = logInOutTitle === 'Log In';
   return (
     <View isSafe style={styles.container}>
       <ScrollView style={styles.container}>
@@ -38,7 +40,16 @@ export const Settings = ({
           <List.Item
             title={logInOutTitle}
             onPress={onLogInOut}
-            left={listIcon(Icons.SIGN_OUT)}
+            left={
+              isLogIn
+                ? (p) => (
+                    <View>
+                      {listIcon(Icons.SIGN_IN)(p)}
+                      <Badge visible size={8} style={styles.badge} />
+                    </View>
+                  )
+                : listIcon(Icons.SIGN_OUT)
+            }
           />
           {onDeleteGifts ? (
             <List.Item
@@ -75,7 +86,7 @@ export const Settings = ({
           {onShowAd ? (
             <List.Item
               title="Want to support this app?"
-              description="Watch a short ad!"
+              description="Watch a short advertisement"
               left={listIcon(Icons.HEART)}
               onPress={onShowAd}
             />
@@ -93,4 +104,11 @@ export const Settings = ({
   );
 };
 
-const styles = StyleSheet.create({ container: { flex: 1 } });
+const styles = StyleSheet.create({
+  badge: {
+    position: 'absolute',
+    top: 0,
+    right: 14,
+  },
+  container: { flex: 1 },
+});

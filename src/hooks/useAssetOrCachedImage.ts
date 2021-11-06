@@ -22,17 +22,19 @@ export const useAssetOrCachedImageSource = (
   const localCachedURI = useCachedImageUri(remoteGUID);
 
   useEffect(() => {
-    const assetSource = getAssetFromType(guid, enumType);
-    if (assetSource) {
-      setSource(assetSource);
-      setRemoteGUID(undefined);
-    } else {
-      setSource(undefined);
-      setRemoteGUID(guid);
+    if (guid) {
+      const assetSource = getAssetFromType(guid, enumType);
+      if (assetSource) {
+        setSource(assetSource);
+        setRemoteGUID(undefined);
+      } else {
+        setSource(undefined);
+        setRemoteGUID(guid);
+      }
     }
   }, [enumType, guid]);
 
-  const localSource = localCachedURI ? { uri: localCachedURI } : undefined;
+  const localSource = { uri: localCachedURI };
 
-  return source || localSource;
+  return source ?? localSource;
 };

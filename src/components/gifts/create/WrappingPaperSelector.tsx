@@ -21,7 +21,7 @@ export const WrappingPaperSelector = ({
 }: Props) => {
   const [tmpSelected, setTmpSelected] = useState<number>(-1);
   useEffect(() => {
-    if (visible) {
+    if (visible && typeof selected !== 'undefined') {
       setTmpSelected(images.indexOf(selected));
     }
   }, [selected, visible]);

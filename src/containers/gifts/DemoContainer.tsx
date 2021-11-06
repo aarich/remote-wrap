@@ -13,10 +13,10 @@ import {
 } from '../../utils';
 
 export const isScreenshotting = false;
-const title = isScreenshotting ? 'Happy Holidays, Alex!' : 'Sample';
+const title = isScreenshotting ? 'Happy Holidays, Alex!' : '';
 const message = isScreenshotting
   ? undefined
-  : 'Gifts include two images: a wrapping paper and the hidden gift. The recipient scratches off the wrapping paper to reveal your gift, which anyone can watch in real time!\nGive it a try! Scratch the image below.';
+  : 'A gift is an uploaded image hidden by wrapping paper. The recipient scratches off the wrapping paper to reveal the gift, which you can watch in real time!\nGive it a try! Scratch the image below.';
 
 const DEMO_GIFT: Gift = {
   createdById: '',
@@ -45,7 +45,7 @@ export const DemoContainer = () => {
           newWrapState = new Array(WRAP_WIDTH)
             .fill([])
             .map(() => new Array(WRAP_WIDTH).fill(true));
-        } else if (wrapState === FULLY_UNWRAPPED_STATE) {
+        } else {
           // nothing to do
           return;
         }
@@ -88,6 +88,7 @@ export const DemoContainer = () => {
         resetDemo();
       }}
       onRemoveWrap={() => setAllWrap(FULLY_UNWRAPPED_STATE)}
+      isDemo
     />
   );
 };

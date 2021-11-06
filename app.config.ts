@@ -48,6 +48,7 @@ const config: ExpoConfig = {
     config: {
       googleMobileAdsAppId: 'ca-app-pub-6949812709353975~8167043362',
     },
+    buildNumber: '2',
   },
   web: {
     name: 'Presence',

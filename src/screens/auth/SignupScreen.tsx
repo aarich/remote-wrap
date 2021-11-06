@@ -4,9 +4,10 @@ import {
   linkWithCredential,
 } from 'firebase/auth';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { TextInput as RNTextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Headline } from 'react-native-paper';
+import { Caption, Headline } from 'react-native-paper';
 import {
   Button,
   FormErrorMessage,
@@ -35,10 +36,11 @@ export const SignupScreen = ({ navigation }: Props) => {
 
   const handleSignup = async ({ email, password }) => {
     let signUpFn;
-    if (auth.currentUser) {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
       signUpFn = () =>
         linkWithCredential(
-          auth.currentUser,
+          currentUser,
           EmailAuthProvider.credential(email, password)
         );
     } else {
@@ -55,6 +57,9 @@ export const SignupScreen = ({ navigation }: Props) => {
       });
   };
 
+  const passwordRef = useRef<RNTextInput>(null);
+  const confirmPasswordRef = useRef<RNTextInput>(null);
+
   return (
     <View isSafe style={formStyles.container}>
       <KeyboardAwareScrollView
@@ -64,6 +69,7 @@ export const SignupScreen = ({ navigation }: Props) => {
         <View style={formStyles.logoContainer}>
           <Logo />
           <Headline>Create account</Headline>
+          <Caption>Access your gifts anywhere</Caption>
         </View>
 
         <Formik
@@ -90,14 +96,16 @@ export const SignupScreen = ({ navigation }: Props) => {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 textContentType="emailAddress"
-                autoFocus={true}
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 style={formStyles.textInput}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
               <TextInput
+                ref={passwordRef}
                 leftIcon="key"
                 label="Enter password"
                 autoCapitalize="none"
@@ -110,6 +118,8 @@ export const SignupScreen = ({ navigation }: Props) => {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 style={formStyles.textInput}
+                returnKeyType="next"
+                onSubmitEditing={() => confirmPasswordRef.current?.focus()}
               />
               <FormErrorMessage
                 error={errors.password}
@@ -128,6 +138,7 @@ export const SignupScreen = ({ navigation }: Props) => {
                 onChangeText={handleChange('confirmPassword')}
                 onBlur={handleBlur('confirmPassword')}
                 style={formStyles.textInput}
+                returnKeyType="go"
               />
               <FormErrorMessage
                 error={errors.confirmPassword}

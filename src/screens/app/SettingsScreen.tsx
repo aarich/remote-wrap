@@ -39,7 +39,7 @@ export const SettingsScreen = () => {
       setIsLoading(true);
       getDocs(q)
         .then((snapshot) => {
-          const promises = [];
+          const promises: Promise<void>[] = [];
           snapshot.forEach((doc) => promises.push(deleteDoc(doc.ref)));
 
           const message =

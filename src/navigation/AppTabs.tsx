@@ -2,10 +2,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useIsFocused } from '@react-navigation/core';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { FAB, Portal, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Badge, FAB, Portal, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, Icons } from '../components';
+import { useCurrentUser } from '../providers';
 import { HomeScreen, SettingsScreen } from '../screens';
 import { DemoScreen } from '../screens/gifts';
 import { NavProp } from './AppStack';
@@ -21,6 +22,14 @@ export const AppTabs = ({ navigation }: Props) => {
   const isFocused = useIsFocused();
   const theme = useTheme();
   const [currentTab, setCurrentTab] = useState('Home');
+  const currentUser = useCurrentUser();
+
+  const showBadge = !currentUser || currentUser.isAnonymous;
+
+  const noBadgeSettingsIcon = ({ color, size }) => (
+    <Icon name={Icons.SETTINGS} color={color} size={size} />
+  );
+
   return (
     <>
       <Tab.Navigator
@@ -61,10 +70,18 @@ export const AppTabs = ({ navigation }: Props) => {
           name="Settings"
           options={{
             title: 'Options',
-            tabBarIcon: ({ color, size }) => (
-              <Icon name={Icons.SETTINGS} color={color} size={size} />
-            ),
-            headerShown: false,
+            tabBarIcon: showBadge
+              ? ({ color, size }) => (
+                  <View>
+                    <Icon name={Icons.SETTINGS} color={color} size={size} />
+                    <Badge
+                      visible
+                      size={Math.ceil(size / 3)}
+                      style={styles.badge}
+                    />
+                  </View>
+                )
+              : noBadgeSettingsIcon,
           }}
         />
       </Tab.Navigator>
@@ -84,4 +101,11 @@ export const AppTabs = ({ navigation }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({ fab: { position: 'absolute', right: 22 } });
+const styles = StyleSheet.create({
+  badge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  fab: { position: 'absolute', right: 22 },
+});

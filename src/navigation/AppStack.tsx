@@ -54,10 +54,11 @@ export const AppStack = () => {
       case 'Home':
         return { title: 'Gifts' };
       case 'Demo':
-        return { headerShown: false };
+        return { title: 'Demo' };
       case 'Settings':
         return { title: 'Options' };
     }
+    return {};
   };
   return (
     <Stack.Navigator screenOptions={{ headerLargeTitle: true }}>

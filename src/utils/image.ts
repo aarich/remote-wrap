@@ -1,5 +1,5 @@
 import * as FileSystem from 'expo-file-system';
-import { manipulateAsync } from 'expo-image-manipulator';
+import { ActionResize, manipulateAsync } from 'expo-image-manipulator';
 import {
   launchCameraAsync,
   launchImageLibraryAsync,
@@ -19,7 +19,7 @@ const resizeImage = async (
   currentWidth: number,
   currentHeight: number
 ) => {
-  let resize = null;
+  let resize: ActionResize['resize'] | null = null;
   if (currentWidth > currentHeight) {
     if (currentWidth > MAX_IMAGE_DIM) {
       resize = { width: MAX_IMAGE_DIM };
@@ -52,7 +52,6 @@ const checkPermission = async (
           { text: 'Ok' },
         ],
       });
-      return;
     }
   }
 
@@ -121,6 +120,6 @@ export const deleteCachedImage = (guid: string) => {
   }
   const cachedURI = getCachedUri(guid);
   return FileSystem.getInfoAsync(cachedURI, { size: false }).then(
-    ({ exists }) => exists && FileSystem.deleteAsync(cachedURI)
+    ({ exists }) => (exists ? FileSystem.deleteAsync(cachedURI) : undefined)
   );
 };

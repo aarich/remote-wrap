@@ -1,16 +1,16 @@
 import React, { memo } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Headline, List, Subheading } from 'react-native-paper';
-import { Icon, Icons, View } from '../..';
+import { Icon, Icons } from '../..';
 import { Gift } from '../../../utils';
 import GiftListItem from './GiftListItem';
 
 type Props = {
   myGifts: Gift[];
   followingGifts: Gift[];
-  onNavigateToGift: (giftId: string) => void;
   onDeleteGift: (gift: Gift) => void;
   onUnfollowGift: (gift: Gift) => void;
+  onNavigateToGift: (giftId: string) => void;
 };
 
 const ViewAll = ({
@@ -21,52 +21,48 @@ const ViewAll = ({
   onUnfollowGift,
 }: Props) => {
   return (
-    <View isSafe style={styles.container}>
-      <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}>
+      <List.Section>
+        <List.Subheader>
+          {myGifts.length === 0 ? '' : 'Created by me'}
+        </List.Subheader>
+        {myGifts.length === 0 ? (
+          <View style={styles.center}>
+            <Headline style={styles.center}>Create something exciting</Headline>
+            <Subheading style={styles.center}>
+              Tap the <Icon name={Icons.PLUS} /> below.
+            </Subheading>
+          </View>
+        ) : (
+          myGifts.map((gift) => {
+            return (
+              <GiftListItem
+                key={gift.id}
+                gift={gift}
+                onPress={() => onNavigateToGift(gift.id)}
+                onDelete={() => onDeleteGift(gift)}
+                mine
+              />
+            );
+          })
+        )}
+      </List.Section>
+      {followingGifts.length > 0 ? (
         <List.Section>
-          <List.Subheader>
-            {myGifts.length === 0 ? '' : 'Created by me'}
-          </List.Subheader>
-          {myGifts.length === 0 ? (
-            <View style={styles.center}>
-              <Headline style={styles.center}>
-                Create something exciting
-              </Headline>
-              <Subheading style={styles.center}>
-                Tap the <Icon name={Icons.PLUS} /> below.
-              </Subheading>
-            </View>
-          ) : (
-            myGifts.map((gift) => {
-              return (
-                <GiftListItem
-                  key={gift.id}
-                  gift={gift}
-                  onPress={() => onNavigateToGift(gift.id)}
-                  onDelete={() => onDeleteGift(gift)}
-                  mine
-                />
-              );
-            })
-          )}
+          <List.Subheader>Shared with me</List.Subheader>
+          {followingGifts.map((gift) => {
+            return (
+              <GiftListItem
+                key={gift.id}
+                gift={gift}
+                onPress={() => onNavigateToGift(gift.id)}
+                onDelete={() => onUnfollowGift(gift)}
+              />
+            );
+          })}
         </List.Section>
-        {followingGifts.length > 0 ? (
-          <List.Section>
-            <List.Subheader>Shared with me</List.Subheader>
-            {followingGifts.map((gift) => {
-              return (
-                <GiftListItem
-                  key={gift.id}
-                  gift={gift}
-                  onPress={() => onNavigateToGift(gift.id)}
-                  onDelete={() => onUnfollowGift(gift)}
-                />
-              );
-            })}
-          </List.Section>
-        ) : undefined}
-      </ScrollView>
-    </View>
+      ) : undefined}
+    </ScrollView>
   );
 };
 

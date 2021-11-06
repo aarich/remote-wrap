@@ -10,8 +10,8 @@ import React, {
 
 export const AuthenticatedUserContext = createContext<{
   user?: User | null;
-  setUser?: Dispatch<SetStateAction<User>>;
-}>({});
+  setUser: Dispatch<SetStateAction<User | null>>;
+}>({ setUser: () => null });
 
 export const AuthenticatedUserProvider: FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);

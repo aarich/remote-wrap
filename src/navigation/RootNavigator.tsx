@@ -35,7 +35,7 @@ export const RootNavigator = () => {
     () =>
       onAuthStateChanged(auth, (authenticatedUser) => {
         setIsLoading(false);
-        setUser(authenticatedUser || null);
+        setUser(authenticatedUser);
       }),
     [setUser, user]
   );

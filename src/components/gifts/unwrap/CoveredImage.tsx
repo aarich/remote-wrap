@@ -43,7 +43,7 @@ const CoveredImage = ({
       return state;
     }
 
-    const ret = [];
+    const ret: [number, number][] = [];
     for (let r = 0; r < state.length; r++) {
       for (let c = 0; c < state[r].length; c++) {
         if (state[r][c]) {

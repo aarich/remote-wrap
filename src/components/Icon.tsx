@@ -10,6 +10,7 @@ export const Icon = (props: Props) => {
 
 export const Icons: Record<string, IconName> = {
   EDIT: 'pencil',
+  SIGN_IN: 'sign-in',
   SIGN_OUT: 'sign-out',
   TRASH: 'trashcan',
   CANCEL: 'x',

@@ -1,16 +1,12 @@
 {
   "applinks": {
+    "apps": [],
     "details": [
       {
         "appIDs": [
           "1593320208.com.mrarich.presence"
         ],
         "components": [
-          {
-            "#": "no_universal_links",
-            "exclude": true,
-            "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
-          },
           {
             "/": "/web/*",
             "exclude": true,

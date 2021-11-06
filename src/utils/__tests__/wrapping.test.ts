@@ -43,9 +43,9 @@ describe('matrix to hex', () => {
   let allCovered: boolean[][];
   let allUncovered: boolean[][];
 
-  const random = [];
+  const random: boolean[][] = [];
   for (let i = 0; i < WIDTH; i++) {
-    const row = [];
+    const row: boolean[] = [];
     for (let j = 0; j < WIDTH; j++) {
       row.push(Math.random() > 0.5);
     }

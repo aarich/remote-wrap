@@ -26,6 +26,7 @@ type Props = {
   onRemoveWrap: VoidFunction;
   onUncoverWrap: (x: number, y: number) => void;
   onDone?: VoidFunction;
+  isDemo?: boolean;
 };
 
 export const UnwrapGift = ({
@@ -37,6 +38,7 @@ export const UnwrapGift = ({
   onRemoveWrap,
   onUncoverWrap,
   onDone,
+  isDemo,
 }: Props) => {
   const [squareWidth, setSquareWidth] = useState(100000);
   const [minHeight, setMinTextHeight] = useState<number>();
@@ -55,7 +57,7 @@ export const UnwrapGift = ({
   );
 
   return (
-    <Card>
+    <Card style={giftCardStyles.card}>
       <Card.Title
         title={gift.title}
         subtitle={gift.message}
@@ -84,25 +86,27 @@ export const UnwrapGift = ({
             </Animated.View>
           </PanGestureHandler>
         </View>
-        <View
-          style={[giftCardStyles.text, { minHeight }]}
-          onLayout={handleTextViewLayout}
-        >
-          {wrapState === FULLY_UNWRAPPED_STATE ? (
-            <Paragraph>You&apos;ve revealed the image!</Paragraph>
-          ) : (
-            <>
-              <Paragraph>
-                Scratch the picture above to remove the wrapping paper and
-                reveal the hidden image!
-              </Paragraph>
-              <Paragraph>
-                Other people who are viewing this gift can see it happen as you
-                go!
-              </Paragraph>
-            </>
-          )}
-        </View>
+        {isDemo ? null : (
+          <View
+            style={[giftCardStyles.text, { minHeight }]}
+            onLayout={handleTextViewLayout}
+          >
+            {wrapState === FULLY_UNWRAPPED_STATE ? (
+              <Paragraph>You&apos;ve revealed the image!</Paragraph>
+            ) : (
+              <>
+                <Paragraph>
+                  Scratch the picture above to remove the wrapping paper and
+                  reveal the hidden image!
+                </Paragraph>
+                <Paragraph>
+                  Other people who are viewing this gift can see it happen as
+                  you go!
+                </Paragraph>
+              </>
+            )}
+          </View>
+        )}
       </Card.Content>
       <Card.Actions style={giftCardStyles.flexEnd}>
         <Button

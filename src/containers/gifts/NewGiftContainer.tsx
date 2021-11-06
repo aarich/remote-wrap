@@ -37,6 +37,12 @@ export const NewGiftContainer = ({ navigation }: Props) => {
       if (!image) {
         toast({ text: "Couldn't locate that image...", color: 'error' });
         return;
+      } else if (!wrap) {
+        toast({
+          text: 'We had trouble locating your selected wrapping paper',
+          color: 'error',
+        });
+        return;
       }
 
       const uploadWrap = !Object.values(StandardWrap).includes(
@@ -46,10 +52,14 @@ export const NewGiftContainer = ({ navigation }: Props) => {
       if (!user) {
         console.log('Signing in anonymously');
         await signInAnonymously(auth);
-        console.log(`Signed in as ${auth.currentUser.uid}`);
+        console.log(`Signed in as ${auth.currentUser?.uid}`);
       }
 
-      const createdById = auth.currentUser.uid;
+      const createdById = auth.currentUser?.uid;
+      if (!createdById) {
+        toast({ text: 'We had trouble signing you in', color: 'error' });
+        return;
+      }
 
       const createGiftDoc = (photoUID: string, wrapUID: string) => {
         // Success!
@@ -167,7 +177,9 @@ export const NewGiftContainer = ({ navigation }: Props) => {
   return (
     <>
       <WrappingPaperSelector
-        selected={wrap in StandardWrap ? (wrap as StandardWrap) : undefined}
+        selected={
+          wrap && wrap in StandardWrap ? (wrap as StandardWrap) : undefined
+        }
         visible={showWrapSelect}
         onSelect={setWrap}
         onRequestClose={() => setShowWrapSelect(false)}

@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/core';
 import { AdMobRewarded, isAvailableAsync } from 'expo-ads-admob';
 import * as FileSystem from 'expo-file-system';
-import { storeUrl } from 'expo-store-review';
+import { storeUrl as getStoreUrl } from 'expo-store-review';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Linking, Platform } from 'react-native';
 import { Settings } from '../../components/app';
@@ -11,11 +11,11 @@ import { AdUnit, getAdUnitId } from '../../utils';
 type Props = {
   onDeleteGifts?: () => void;
   onLogInOut: () => void;
-  logInOutTitle: string;
+  logInOutTitle: 'Log In' | 'Sign Out';
   onNavigate: (screen: 'About' | 'Storybook') => void;
 };
 
-const calcCache = (setter: (size: number) => void) => {
+const calcCache = (setter: (size?: number) => void) => {
   Platform.OS !== 'web' &&
     FileSystem.cacheDirectory &&
     FileSystem.getInfoAsync(FileSystem.cacheDirectory).then((info) =>
@@ -37,9 +37,11 @@ export const SettingsContainer = ({
 
   useEffect(() => calcCache(setStorage), [isFocused]);
 
-  const openStoreURL = storeUrl() && (() => Linking.openURL(storeUrl()));
+  const storeUrl = getStoreUrl();
+  const openStoreURL = storeUrl ? () => Linking.openURL(storeUrl) : undefined;
   const resetCache = useCallback(
     () =>
+      FileSystem.cacheDirectory &&
       FileSystem.readDirectoryAsync(FileSystem.cacheDirectory)
         .then((files) =>
           Promise.all(
@@ -54,9 +56,8 @@ export const SettingsContainer = ({
   );
 
   useEffect(() => {
-    isAvailableAsync().then(
-      (available) =>
-        available &&
+    isAvailableAsync().then((available) => {
+      available &&
         AdMobRewarded.setAdUnitID(
           getAdUnitId(AdUnit.SettingsInterstitial)
         ).then(() => {
@@ -77,8 +78,8 @@ export const SettingsContainer = ({
           AdMobRewarded.requestAdAsync({
             servePersonalizedAds: false,
           });
-        })
-    );
+        });
+    });
 
     return () =>
       AdMobRewarded.removeAllListeners && AdMobRewarded.removeAllListeners();
@@ -91,7 +92,7 @@ export const SettingsContainer = ({
       onLogInOut={onLogInOut}
       onNavigate={onNavigate}
       onOpenStoreURL={openStoreURL}
-      onResetCache={Platform.OS !== 'web' && resetCache}
+      onResetCache={Platform.OS !== 'web' ? resetCache : undefined}
       onShowAd={showAd}
       storage={storage}
     />

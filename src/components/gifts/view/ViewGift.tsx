@@ -16,6 +16,7 @@ type Props = {
   onDelete?: VoidFunction;
   onDone: VoidFunction;
   onShare: VoidFunction;
+  onOpenInApp?: VoidFunction;
 };
 
 export const ViewGift = memo(
@@ -29,15 +30,16 @@ export const ViewGift = memo(
     onDelete,
     onDone,
     onShare,
+    onOpenInApp,
   }: Props) => {
     const [squareWidth, setSquareWidth] = useState(1);
     let followCount: string;
     if (gift.following.length == 0) {
-      followCount = 'no other users';
+      followCount = 'no other logged in users';
     } else if (gift.following.length === 1) {
-      followCount = '1 other user';
+      followCount = '1 other logged in user';
     } else {
-      followCount = `${gift.following.length} other users`;
+      followCount = `${gift.following.length} other logged in users`;
     }
     return (
       <View>
@@ -56,6 +58,11 @@ export const ViewGift = memo(
             </Paragraph>
           </Card.Content>
           <Card.Actions style={styles.flexEnd}>
+            {onOpenInApp ? (
+              <Button onPress={onOpenInApp} style={styles.button}>
+                Open In App
+              </Button>
+            ) : null}
             {onEdit ? (
               <Button onPress={onEdit} style={styles.button}>
                 Edit
