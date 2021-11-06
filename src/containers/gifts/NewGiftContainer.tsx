@@ -1,5 +1,6 @@
 import { addDoc, collection, serverTimestamp } from '@firebase/firestore';
 import { ref, uploadBytesResumable, UploadTask } from '@firebase/storage';
+import { logEvent } from 'expo-firebase-analytics';
 import { signInAnonymously } from 'firebase/auth';
 import React, { ComponentProps, useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -82,6 +83,9 @@ export const NewGiftContainer = ({ navigation }: Props) => {
             navigation.replace('View', { id: docRef.id });
             toast({ text: 'Created!' });
           })
+          .then(() =>
+            logEvent('gift_created', { uploaded_wrap: uploadWrap, title })
+          )
           .catch((error) => {
             console.log('Failed to create gift');
             setImageUploadProgress(undefined);
@@ -157,11 +161,6 @@ export const NewGiftContainer = ({ navigation }: Props) => {
         { text: 'Browse Catalog', onPress: () => setShowWrapSelect(true) },
         {
           text: 'Custom Upload',
-          // onPress: () =>
-          //   prompt({
-          //     message: 'Do you need this feature? Reach out to enable it!',
-          //     actions: [{ text: 'Ok' }],
-          //   }),
           onPress: () =>
             selectImage(
               prompt,

@@ -10,10 +10,13 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     if (url) {
-      Analytics.logEvent('HandleURL', { url });
-
       const { path, queryParams } = Linking.parse(url);
       console.log({ path, queryParams });
+      Analytics.logEvent('handle_url', {
+        url,
+        path,
+        params: JSON.stringify(queryParams),
+      });
 
       if (path === 'gift' && queryParams.id) {
         navigation.dispatch(StackActions.push('View', { id: queryParams.id }));

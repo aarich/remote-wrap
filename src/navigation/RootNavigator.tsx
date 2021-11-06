@@ -3,6 +3,7 @@ import {
   DefaultTheme as NavLightTheme,
   NavigationContainer,
 } from '@react-navigation/native';
+import { NavigationState } from '@react-navigation/routers';
 import * as Analytics from 'expo-firebase-analytics';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
@@ -28,12 +29,13 @@ export const CombinedLightTheme = {
   colors: { ...PaperLightTheme.colors, ...NavLightTheme.colors },
 };
 
-function getActiveRouteName(navigationState) {
+function getActiveRouteName(navigationState?: NavigationState) {
   if (!navigationState) return null;
   const route = navigationState.routes[navigationState.index];
   // Parse the nested navigators
-  if (route.routes) return getActiveRouteName(route);
-  return route.routeName;
+  if (route.state && 'index' in route.state)
+    return getActiveRouteName(route.state as NavigationState);
+  return route.name;
 }
 
 export const RootNavigator = () => {
@@ -52,6 +54,12 @@ export const RootNavigator = () => {
       }),
     [setUser, user]
   );
+
+  useEffect(() => {
+    if (__DEV__) {
+      Analytics.setDebugModeEnabled(true);
+    }
+  }, []);
 
   const isDark = useColorScheme() === 'dark';
 
