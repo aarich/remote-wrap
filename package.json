@@ -6,6 +6,7 @@
     "predeploy-web": "expo build:web",
     "deploy-hosting": "npm run predeploy-web && firebase deploy --only hosting",
     "storybook": "start-storybook -p 7007",
+    "publish": "expo publish --release-channel prod-1-0",
     "build-ios": "echo \"Validate app config! ***\" && cat ./app.config.ts | egrep \"(buildNumber|version)\" && expo build:ios -t archive --release-channel prod-1-0",
     "build-storybook": "build-storybook"
   },

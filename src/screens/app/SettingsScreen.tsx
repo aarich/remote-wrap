@@ -31,31 +31,37 @@ export const SettingsScreen = () => {
   }, [navigation, user]);
 
   const deleteGiftsAction = useCallback(() => {
-    const doDelete = () => {
-      const q = query(
-        collection(firestore, 'gifts'),
-        where('createdById', '==', user?.uid)
-      );
-      setIsLoading(true);
-      getDocs(q)
-        .then((snapshot) => {
-          const promises: Promise<void>[] = [];
-          snapshot.forEach((doc) => promises.push(deleteDoc(doc.ref)));
+    return new Promise<boolean>((resolve) => {
+      const doDelete = () => {
+        const q = query(
+          collection(firestore, 'gifts'),
+          where('createdById', '==', user?.uid)
+        );
+        setIsLoading(true);
+        getDocs(q)
+          .then((snapshot) => {
+            const promises: Promise<void>[] = [];
+            snapshot.forEach((doc) => promises.push(deleteDoc(doc.ref)));
 
-          const message =
-            snapshot.size === 1 ? '1 gift' : `${snapshot.size} gifts`;
-          return Promise.all(promises).then(() =>
-            toast({ text: `Deleted ${message}.` })
-          );
-        })
-        .finally(() => setIsLoading(false));
-    };
+            const message =
+              snapshot.size === 1 ? '1 gift' : `${snapshot.size} gifts`;
+            return Promise.all(promises).then(() =>
+              toast({ text: `Deleted ${message}.` })
+            );
+          })
+          .then(() => resolve(true))
+          .finally(() => setIsLoading(false));
+      };
 
-    prompt({
-      title: 'Are you sure',
-      message:
-        'Everyone will lose access to all gifts created by you. This is not reversible.',
-      actions: [{ text: 'Delete them', onPress: doDelete }, { text: 'Cancel' }],
+      prompt({
+        title: 'Are you sure',
+        message:
+          'Everyone will lose access to all gifts created by you. This is not reversible.',
+        actions: [
+          { text: 'Delete them', onPress: doDelete },
+          { text: 'Cancel', onPress: () => resolve(false) },
+        ],
+      });
     });
   }, [prompt, toast, user?.uid]);
 

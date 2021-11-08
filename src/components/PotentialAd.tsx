@@ -1,6 +1,7 @@
 import { AdMobBanner } from 'expo-ads-admob';
 import React from 'react';
 import { Platform } from 'react-native';
+import { isScreenshotting } from '../containers/gifts';
 import { AdUnit, getAdUnitId } from '../utils';
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 };
 
 export const PotentialAd = ({ unit }: Props) => {
-  if (Platform.OS === 'web') {
+  if (Platform.OS === 'web' || isScreenshotting) {
     return null;
   }
 

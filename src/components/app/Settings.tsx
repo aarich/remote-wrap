@@ -9,13 +9,14 @@ import { PotentialAd } from '../PotentialAd';
 import { View } from '../View';
 
 type Props = {
-  onDeleteGifts?: () => void;
+  onDeleteGifts?: VoidFunction;
+  onDeleteAccount?: VoidFunction;
   onLogInOut: () => void;
   logInOutTitle: 'Log In' | 'Sign Out';
   onNavigate: (screen: 'About' | 'Storybook') => void;
   onResetCache?: VoidFunction;
   onOpenStoreURL?: VoidFunction;
-  onShowAd?: VoidFunction;
+  onSupportApp?: VoidFunction;
   storage?: number;
 };
 
@@ -23,11 +24,12 @@ const listIcon = (icon: IconName) => (p) => <List.Icon icon={icon} {...p} />;
 
 export const Settings = ({
   onDeleteGifts,
+  onDeleteAccount,
   onLogInOut,
   onNavigate,
   onResetCache,
   onOpenStoreURL,
-  onShowAd,
+  onSupportApp,
   storage,
   logInOutTitle,
 }: Props) => {
@@ -59,6 +61,13 @@ export const Settings = ({
               left={listIcon(Icons.TRASH)}
             />
           ) : null}
+          {onDeleteAccount ? (
+            <List.Item
+              title="Delete My Account"
+              onPress={onDeleteAccount}
+              left={listIcon(Icons.ALERT)}
+            />
+          ) : null}
         </List.Section>
         <List.Section>
           <List.Subheader>App</List.Subheader>
@@ -84,12 +93,11 @@ export const Settings = ({
               onPress={onOpenStoreURL}
             />
           ) : null}
-          {onShowAd ? (
+          {onSupportApp ? (
             <List.Item
-              title="Want to support this app?"
-              description="Watch a short advertisement"
+              title="Support the developer!"
               left={listIcon(Icons.HEART)}
-              onPress={onShowAd}
+              onPress={onSupportApp}
             />
           ) : null}
           {__DEV__ ? (

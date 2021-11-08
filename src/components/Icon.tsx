@@ -29,7 +29,8 @@ type IconKey =
   | 'UNFOLLOW'
   | 'GIFT'
   | 'DEMO'
-  | 'SETTINGS';
+  | 'SETTINGS'
+  | 'ALERT';
 
 export const Icons: Record<IconKey, IconName> = {
   EDIT: 'pencil',
@@ -53,4 +54,5 @@ export const Icons: Record<IconKey, IconName> = {
   GIFT: 'gift',
   DEMO: 'play',
   SETTINGS: 'settings',
+  ALERT: 'alert',
 };

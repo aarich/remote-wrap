@@ -12,7 +12,7 @@ import {
   WRAP_WIDTH,
 } from '../../utils';
 
-export const isScreenshotting = false;
+export const isScreenshotting = __DEV__ && false;
 const title = isScreenshotting ? 'Happy Holidays, Alex!' : '';
 const message = isScreenshotting
   ? undefined

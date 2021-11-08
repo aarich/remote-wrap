@@ -8,7 +8,7 @@ import React, {
 import { StyleSheet, View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 
-type PromptOptions = {
+export type PromptOptions = {
   title?: string;
   message?: string;
   actions: { text: string; onPress?: () => void }[];

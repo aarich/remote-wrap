@@ -7,7 +7,7 @@ import { NavigationState } from '@react-navigation/routers';
 import * as Analytics from 'expo-firebase-analytics';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperLightTheme,
@@ -56,7 +56,7 @@ export const RootNavigator = () => {
   );
 
   useEffect(() => {
-    if (__DEV__) {
+    if (__DEV__ && Platform.OS !== 'web') {
       Analytics.setDebugModeEnabled(true);
     }
   }, []);

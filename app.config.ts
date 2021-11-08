@@ -20,6 +20,7 @@ const config: ExpoConfig = {
   },
   assetBundlePatterns: ['**/*'],
   android: {
+    config: { googleMobileAdsAppId: 'ca-app-pub-6949812709353975~4376181595' },
     package: 'rich.alex.presence',
     googleServicesFile: './google-services.json',
     permissions: ['CAMERA', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE'],
@@ -81,7 +82,7 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-    MyVersion: '3',
+    MyVersion: '6',
   },
 };
 

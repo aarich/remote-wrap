@@ -28,6 +28,21 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
     [onDone, toast]
   );
 
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const base = 'app-id=1593320208';
+      const parameterized = `${base}, app-argument=remotewrap:///gift?id=${id}`;
+
+      const setMeta = (val: string) =>
+        document
+          ?.querySelector('meta[name="apple-itunes-app"]')
+          ?.setAttribute('content', val);
+
+      setMeta(parameterized);
+      return () => setMeta(base);
+    }
+  }, [id]);
+
   const { gift, giftSource, wrapSource, wrapState } = useGiftInfo(
     id,
     onFailedToLoadGift
