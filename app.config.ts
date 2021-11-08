@@ -51,7 +51,7 @@ const config: ExpoConfig = {
     config: {
       googleMobileAdsAppId: 'ca-app-pub-6949812709353975~8167043362',
     },
-    buildNumber: '2',
+    buildNumber: '3',
   },
   web: {
     name: 'Presence',
@@ -81,7 +81,7 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-    MyVersion: '2',
+    MyVersion: '3',
   },
 };
 

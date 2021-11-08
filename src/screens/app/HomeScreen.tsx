@@ -24,8 +24,7 @@ export const HomeScreen = () => {
         navigation.dispatch(StackActions.push('About'));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [navigation, url]);
 
   return <ViewAllContainer />;
 };

@@ -1,3 +1,4 @@
+import * as Analytics from 'expo-firebase-analytics';
 import React from 'react';
 import { LogBox, useColorScheme } from 'react-native';
 import 'react-native-get-random-values';
@@ -16,6 +17,14 @@ import {
 } from './src/providers';
 
 LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core']);
+
+if (!__DEV__) {
+  console.log = () => null;
+  console.warn = (...args) =>
+    Analytics.logEvent('console_warn', { log_data: JSON.stringify({ args }) });
+  console.error = (...args) =>
+    Analytics.logEvent('console_error', { log_data: JSON.stringify({ args }) });
+}
 
 const App = () => {
   const isDark = useColorScheme() === 'dark';

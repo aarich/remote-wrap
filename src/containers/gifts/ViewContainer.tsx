@@ -15,7 +15,7 @@ type Props = {
   onDone: VoidFunction;
 };
 
-const makeShareUrl = (base: string, id: string) => `${base}gift?id=${id}`;
+const makeShareUrl = (base: string, id: string) => `${base}/gift?id=${id}`;
 
 export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   const prompt = usePrompt();
@@ -71,7 +71,7 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
   }, [gift, isOwner, currentUserId]);
 
   const onShare = useCallback(() => {
-    const url = makeShareUrl(`https://presence.mrarich.com/`, id);
+    const url = makeShareUrl(`https://presence.mrarich.com`, id);
 
     isSharingAvailable().then((canShare) => {
       const actions: Parameters<typeof prompt>[0]['actions'] = [
