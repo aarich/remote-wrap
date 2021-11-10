@@ -56,9 +56,10 @@ const config: ExpoConfig = {
   },
   web: {
     name: 'Presence',
-    backgroundColor: '#000',
+    backgroundColor: '#000000',
     description: 'An app for sharing gifts remotely',
-    themeColor: '#000',
+    themeColor: '#000000',
+    preferRelatedApplications: true,
     config: {
       firebase: {
         apiKey: process.env.API_KEY,
