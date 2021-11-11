@@ -3,7 +3,7 @@
   "scripts": {
     "test": "jest",
     "testWatch": "jest --watch --coverage=false --changedSince=origin/master",
-    "predeploy-web": "expo build:web",
+    "predeploy-web": "GENERATE_SOURCEMAP=false && expo build:web",
     "deploy-hosting": "npm run predeploy-web && firebase deploy --only hosting",
     "storybook": "start-storybook -p 7007",
     "publish": "expo publish --release-channel prod-1-0",

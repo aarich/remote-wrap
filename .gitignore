@@ -45,6 +45,7 @@ Temporary Items
 .firebase/*
 google-services.json
 GoogleService-Info.plist
+functions
 
 # Until storybook is set up
 storybook
