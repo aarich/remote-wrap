@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 0.36.1"
+  },
+  "build": {
+    "production": {
+      "releaseChannel": "prod-1-1",
+      "env": {
+        "AUTH_DOMAIN": "remote-wrap.firebaseapp.com",
+        "DATABASE_URL": "https://remote-wrap.firebaseio.com",
+        "PROJECT_ID": "remote-wrap",
+        "STORAGE_BUCKET": "remote-wrap.appspot.com"
+      }
+    },
+    "development": {
+      "releaseChannel": "staging",
+      "developmentClient": true,
+      "distribution": "internal",
+      "extends": "production"
+    },
+    "preview": {
+      "developmentClient": false
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

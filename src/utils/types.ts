@@ -11,6 +11,7 @@ export type Gift = {
   following: string[];
   createdOn: FieldValue;
   wrapState: string;
+  resets?: boolean;
 };
 
 export enum StandardWrap {

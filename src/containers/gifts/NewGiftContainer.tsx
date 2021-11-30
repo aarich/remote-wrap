@@ -64,10 +64,11 @@ export const NewGiftContainer = ({ navigation }: Props) => {
 
       const createGiftDoc = (photoUID: string, wrapUID: string) => {
         // Success!
-        const { title, message, age } = values;
+        const { title, message, age, resets } = values;
         const doc: Omit<Gift, 'id'> = {
           title,
           message,
+          resets,
           age: age ? parseInt(age) : -1,
           createdById,
           createdOn: serverTimestamp(),

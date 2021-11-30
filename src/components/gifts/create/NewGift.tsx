@@ -1,7 +1,13 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button, FormErrorMessage, LoadingIndicator, TextInput } from '../..';
+import {
+  Button,
+  FormErrorMessage,
+  LoadingIndicator,
+  Switch,
+  TextInput,
+} from '../..';
 import { formStyles, newGiftValidationSchema } from '../../../utils';
 
 type Props = {
@@ -10,7 +16,12 @@ type Props = {
   imageUploadProgress?: number;
   onPressImageSelect: () => void;
   onPressWrapSelect: () => void;
-  onCreate: (v: { title: string; message?: string; age?: string }) => void;
+  onCreate: (v: {
+    title: string;
+    message?: string;
+    age?: string;
+    resets?: boolean;
+  }) => void;
 };
 
 export const NewGift = ({
@@ -37,6 +48,7 @@ export const NewGift = ({
           title: '',
           message: '',
           age: '',
+          resets: false,
         }}
         validationSchema={newGiftValidationSchema}
         onSubmit={(values) => onCreate(values)}
@@ -48,6 +60,7 @@ export const NewGift = ({
           handleChange,
           handleSubmit,
           handleBlur,
+          setFieldValue,
         }) => (
           <>
             <TextInput
@@ -71,6 +84,18 @@ export const NewGift = ({
               error={errors.message}
               visible={touched.message}
             />
+
+            <Switch
+              value={values.resets}
+              label="Reset each time the gift is opened"
+              caption={
+                values.resets
+                  ? "You won't be able to follow along as someone unwraps the gift. Every time the gift is opened it will initially appear as wrapped."
+                  : 'The gift will be in the same unwrapped-state for everyone. You can watch it be unwrapped from any device in real-time.'
+              }
+              onToggle={() => setFieldValue('resets', !values.resets)}
+            />
+
             {/* <TextInput
               label="Delete after how many days (optional)"
               keyboardType="number-pad"

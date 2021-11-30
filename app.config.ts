@@ -6,7 +6,7 @@ const config: ExpoConfig = {
   slug: 'remote-wrap',
   privacy: 'hidden',
   platforms: ['ios', 'android', 'web'],
-  version: '1.0',
+  version: '1.1',
   scheme: 'remotewrap',
   orientation: 'portrait',
   icon: './assets/gift-outline-white-background.png',
@@ -83,8 +83,9 @@ const config: ExpoConfig = {
     messagingSenderId: process.env.MESSAGING_SENDER_ID,
     appId: process.env.APP_ID,
     measurementId: process.env.MEASUREMENT_ID,
-    MyVersion: '6',
+    MyVersion: '9',
   },
+  plugins: ['expo-system-ui'],
 };
 
 export default config;

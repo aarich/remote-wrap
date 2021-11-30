@@ -88,7 +88,7 @@ export const AppTabs = ({ navigation }: Props) => {
 
       <Portal>
         <FAB
-          visible={isFocused && ['Home', 'Settings'].includes(currentTab)}
+          visible={isFocused && ['Home'].includes(currentTab)}
           // MaterialIcons so that the icon is centered properly
           icon={(props) => <MaterialIcons name="add" {...props} />}
           style={[{ bottom: safeArea.bottom + 65 }, styles.fab]}

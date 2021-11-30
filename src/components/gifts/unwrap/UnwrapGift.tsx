@@ -99,10 +99,12 @@ export const UnwrapGift = ({
                   Scratch the picture above to remove the wrapping paper and
                   reveal the hidden image!
                 </Paragraph>
-                <Paragraph>
-                  Other people who are viewing this gift can see it happen as
-                  you go!
-                </Paragraph>
+                {gift.resets ? null : (
+                  <Paragraph>
+                    Other people who are viewing this gift can see it happen as
+                    you go!
+                  </Paragraph>
+                )}
               </>
             )}
           </View>

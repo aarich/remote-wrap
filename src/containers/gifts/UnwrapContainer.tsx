@@ -56,7 +56,7 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
   }, [hasWrapStateBeenLoaded, wrapStateFirestore]);
 
   const updateWrapStateInFirebase = useCallback(() => {
-    if (typeof wrapStateRef.current === 'undefined') {
+    if (typeof wrapStateRef.current === 'undefined' || gift?.resets) {
       return;
     }
 
@@ -74,7 +74,7 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
           console.warn('failed to update wrapping state', error)
         );
     }
-  }, [hasWrapStateChanged, id]);
+  }, [hasWrapStateChanged, id, gift?.resets]);
 
   const onUncover = useCallback((x, y) => {
     if (typeof wrapStateRef.current === 'undefined') {
@@ -124,8 +124,7 @@ export const UnwrapContainer = ({ id, onDone }: Props) => {
       clearInterval(timeout);
       updateWrapStateInFirebase();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateWrapStateInFirebase]);
 
   if (
     !gift ||
