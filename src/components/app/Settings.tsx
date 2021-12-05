@@ -4,8 +4,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Badge, List } from 'react-native-paper';
 import { Icons } from '../.';
 import { AdUnit } from '../../utils';
+import { Ad } from '../ads/Ad';
 import { IconName } from '../Icon';
-import { PotentialAd } from '../PotentialAd';
 import { View } from '../View';
 
 type Props = {
@@ -108,7 +108,7 @@ export const Settings = ({
           ) : null}
         </List.Section>
       </ScrollView>
-      <PotentialAd unit={AdUnit.Settings} />
+      <Ad unit={AdUnit.Settings} />
     </View>
   );
 };

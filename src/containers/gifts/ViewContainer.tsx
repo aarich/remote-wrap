@@ -56,7 +56,10 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
     const performDelete = () => {
       gift &&
         deleteGift(gift)
-          .then(() => toast({ text: 'Gift deleted.' }))
+          .then(() => {
+            onDone();
+            toast({ text: 'Gift deleted.' });
+          })
           .catch((e) =>
             toast({
               text:
@@ -71,7 +74,7 @@ export const ViewContainer = ({ id, onNavigateToUnwrap, onDone }: Props) => {
       message: 'Everyone will lose access immediately',
       actions: [{ text: 'Delete', onPress: performDelete }, { text: 'Cancel' }],
     });
-  }, [gift, prompt, toast]);
+  }, [gift, onDone, prompt, toast]);
 
   useEffect(() => {
     if (
