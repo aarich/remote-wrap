@@ -53,6 +53,7 @@ export const AboutScreen: FC<Props> = () => {
         'Thanks to the following open source software for making this project possible.'
       )}
       {[
+        { name: 'Dreamhost', url: 'mrarich.com/url/dreamhostrw' },
         { name: 'Expo', url: 'expo.dev' },
         { name: 'GitHub', url: 'github.com' },
         { name: 'React Native', url: 'reactnative.dev' },

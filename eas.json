@@ -19,7 +19,11 @@
       "extends": "production"
     },
     "preview": {
-      "developmentClient": false
+      "releaseChannel": "staging",
+      "developmentClient": false,
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {
